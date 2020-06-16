@@ -21,6 +21,7 @@ public class ClientMain {
     }
     public static void main(String[] args) throws IOException {
         ClientMain client = new ClientMain("localhost", 8818);
+        //addUserStatusListener tells you the presence of a user when they go online/offline
         client.addUserStatusListener(new UserStatusListener() {
             @Override
             public void online(String login) {
@@ -32,15 +33,16 @@ public class ClientMain {
                 System.out.println("OFFLINE: " + login);
             }
         });
-
+        //call-back when another user sends a message to this user
         client.addMessageListener(new MessageListener() {
             @Override
             public void onMessage(String fromLogin, String messageBody) {
-                System.out.println(fromLogin);
-                System.out.println("Message from " + fromLogin + ": " + messageBody);
+                //System.out.println(fromLogin);
+                System.out.println("Message from " + fromLogin + " " + messageBody);
             }
         });
 
+        //After you connect you can login, and after you login you can send messages
         if (!client.connect()) {
             System.err.println("Connection failed right here...");
         } else {
@@ -55,19 +57,19 @@ public class ClientMain {
         }
     }
 
-    private void message(String sendTo, String messageBody) throws IOException {
+    public void message(String sendTo, String messageBody) throws IOException {
         String cmd = "message " + sendTo + " " + messageBody + "\r\n";
         serverOut.write(cmd.getBytes());
     }
 
-    private void logoff() throws IOException {
+    public void logoff() throws IOException {
 
         String cmd = "logoff\r\n ";
         serverOut.write(cmd.getBytes());
 
     }
 
-    private boolean login(String login, String password) throws IOException {
+    public boolean login(String login, String password) throws IOException {
 
         String cmd = "login " + login + " " + password + "\r\n";
         serverOut.write(cmd.getBytes());
@@ -106,7 +108,7 @@ public class ClientMain {
                     } else if ("offline".equalsIgnoreCase(cmd)) {
                         handleOffline(tokens);
                     } else if ("message".equalsIgnoreCase(cmd)) {
-                        String[] tokensMsg = StringUtils.split(line, null, 3);
+                        String[] tokensMsg = StringUtils.split(line, null, 4);
                         handleMessage(tokensMsg);
                     }
                 }
@@ -121,12 +123,17 @@ public class ClientMain {
         }
     }
 
+
+    // message jim hello whats up
+    // [message, jim, hello, whats, up]
+    // [message, jim, hello whats up]
+
     private void handleMessage(String[] tokensMsg) {
 
-        String login = tokensMsg[1];
-        String messageBody = tokensMsg[2];
-        System.out.println(login + " YO");
-        System.out.println(messageBody + " DUDE");
+        String login = tokensMsg[2];
+        String messageBody = tokensMsg[3];
+        //System.out.println(login + " YO");
+        //System.out.println(messageBody + " DUDE");
 
         for (MessageListener listener : messageListeners) {
             listener.onMessage(login, messageBody);
@@ -148,7 +155,7 @@ public class ClientMain {
         }
     }
 
-    private boolean connect() throws IOException {
+    public boolean connect() throws IOException {
         try {
             this.socket = new Socket(serverName, serverPort);
             System.out.println("Client port is " + socket.getLocalPort());

@@ -45,7 +45,7 @@ public class ServerWorker extends Thread {
                     handleLogin(outputStream, tokens);
                 } else if ("message".equalsIgnoreCase(cmd)) {
                     String[] tokensMsg = StringUtils.split(line, null, 3);
-                    handleMessage(tokens);
+                    handleMessage(tokensMsg);
                 } else if ("join".equalsIgnoreCase(cmd)) {
                     handleJoin(tokens);
                 } else if ("leave".equalsIgnoreCase(cmd)) {
@@ -64,7 +64,7 @@ public class ServerWorker extends Thread {
     private void handleLeave(String[] tokens) throws IOException {
         if (tokens.length > 1) {
             String topic = tokens[1];
-            String msg = "Left chatroom " + topic + "\r\n";
+            String msg = "Left chatroom: " + topic + "\r\n";
             outputStream.write(msg.getBytes());
             topicSet.remove(topic);
         }
@@ -78,7 +78,7 @@ public class ServerWorker extends Thread {
 
         if (tokens.length > 1) {
             String topic = tokens[1];
-            String msg = "Joined chatroom " + topic + "\r\n";
+            String msg = "Joined chatroom: " + topic + "\r\n";
             outputStream.write(msg.getBytes());
             topicSet.add(topic);
         }
@@ -104,7 +104,7 @@ public class ServerWorker extends Thread {
                 }
             } else {
                 if (sendTo.equalsIgnoreCase(worker.getLogin())) {
-                    String outMsg = "Message from " + login + ": " + body + "\r\n";
+                    String outMsg = "Message from " + login + " " + body + "\r\n";
                     worker.send(outMsg);
                 }
             }
