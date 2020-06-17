@@ -33,6 +33,7 @@ public class UserListPane extends JPanel implements UserStatusListener {
                     frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame2.setSize(500,500);
                     frame2.getContentPane().add(messagePane, BorderLayout.CENTER);
+                    frame2.setLocationRelativeTo(null);
                     frame2.setVisible(true);
                 }
             }
@@ -48,6 +49,7 @@ public class UserListPane extends JPanel implements UserStatusListener {
         frame.setSize(400,600);
 
         frame.getContentPane().add(userListPane, BorderLayout.CENTER);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         if (client.connect()) {

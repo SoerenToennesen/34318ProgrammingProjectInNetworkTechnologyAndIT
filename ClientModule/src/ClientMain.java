@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class ClientMain {
     private final String serverName;
     private final int serverPort;
+
     private Socket socket;
     private OutputStream serverOut;
     private InputStream serverIn;
@@ -69,10 +70,38 @@ public class ClientMain {
 
     }
 
+
+    public boolean create(String user, String password) throws IOException {
+        String cmd = "create " + user + " " + password + "\r\n";
+        //System.out.println(user + password);
+        serverOut.write(cmd.getBytes());
+        System.out.println("");
+        String response = bufferedIn.readLine();
+        System.out.println("Response line: " + response);
+        System.out.println("hi im here");
+        System.out.print(response + "hello");
+        //System.out.println("hithere2");
+        System.out.print(response);
+        //System.out.println("hithere3");
+        System.out.println(response);
+
+        if ("Successful registration".equalsIgnoreCase(response)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+
+
     public boolean login(String login, String password) throws IOException {
 
         String cmd = "login " + login + " " + password + "\r\n";
         serverOut.write(cmd.getBytes());
+        //String wordword = "hello motherfucker";
+        //serverOut.write(wordword.getBytes());
 
         String response = bufferedIn.readLine();
         System.out.println("Response line: " + response);
@@ -132,8 +161,6 @@ public class ClientMain {
 
         String login = tokensMsg[2];
         String messageBody = tokensMsg[3];
-        //System.out.println(login + " YO");
-        //System.out.println(messageBody + " DUDE");
 
         for (MessageListener listener : messageListeners) {
             listener.onMessage(login, messageBody);
@@ -162,8 +189,6 @@ public class ClientMain {
             this.serverOut = socket.getOutputStream();
             this.serverIn = socket.getInputStream();
             this.bufferedIn = new BufferedReader(new InputStreamReader(serverIn));
-            //Thread inputListener = new Thread(new ResponseListener(socket));
-            //inputListener.start();
             //socket.close();
             return true;
         } catch (IOException e) {
@@ -173,6 +198,11 @@ public class ClientMain {
         return false;
 
     }
+
+
+
+
+
 
     public void addUserStatusListener(UserStatusListener listener) {
         userStatusListeners.add(listener);

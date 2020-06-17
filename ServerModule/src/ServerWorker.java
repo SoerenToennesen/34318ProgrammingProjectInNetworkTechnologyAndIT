@@ -1,8 +1,11 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,10 +16,19 @@ public class ServerWorker extends Thread {
     private String login = null;
     private OutputStream outputStream;
     private HashSet<String> topicSet = new HashSet<>();
+    //private ArrayList<String> users = new ArrayList<>();
+    //private ArrayList<String> passwords = new ArrayList<>();
+
+
 
     public ServerWorker(Server server, Socket clientSocket) {
         this.server = server;
         this.clientSocket = clientSocket;
+
+        /*users.add("guest");
+        passwords.add("guest");
+        users.add("jim");
+        passwords.add("jim");*/
     }
 
     @Override
@@ -50,6 +62,8 @@ public class ServerWorker extends Thread {
                     handleJoin(tokens);
                 } else if ("leave".equalsIgnoreCase(cmd)) {
                     handleLeave(tokens);
+                } else if ("create".equalsIgnoreCase(cmd)) {
+                    handleCreate(tokens);
                 }
                 else {
                     String msg = "Unknown command: " + cmd + "\r\n";
@@ -59,6 +73,94 @@ public class ServerWorker extends Thread {
         }
 
         clientSocket.close();
+    }
+
+    private void handleCreate(String[] tokens) throws IOException {
+        if (tokens.length > 1) {
+            String user = tokens[1];
+            String password = tokens[2];
+
+            ArrayList<String> usersBuffer = new ArrayList<>();
+            try {
+                File file = new File("Logs/users.txt");
+                FileReader fr = new FileReader(file);
+                BufferedReader br = new BufferedReader(fr);
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    //System.out.println(line);
+                    usersBuffer.add(line);
+                }
+                fr.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+            if (!usersBuffer.contains(user)) {
+                //users.add(user);
+                //passwords.add(password);
+
+                File usersFile = new File("Logs/users.txt");
+                File passwordsFile = new File("Logs/passwords.txt");
+                if(usersFile.exists() && passwordsFile.exists() && !usersFile.isDirectory()) {
+                    //System.out.println("notnotnot");
+                    try(FileWriter fw = new FileWriter("Logs/users.txt", true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter out = new PrintWriter(bw))
+                    {
+                        out.println(user);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try(FileWriter fw = new FileWriter("Logs/passwords.txt", true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter out = new PrintWriter(bw))
+                    {
+                        out.println(user);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                            new FileOutputStream("Logs/users.txt"), "utf-8"))) {
+                        writer.write(user + "\r\n");
+                    }
+
+                    try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                            new FileOutputStream("Logs/passwords.txt"), "utf-8"))) {
+                        //System.out.println("yoyoyo");
+                        writer.write(password + "\r\n");
+                    }
+                }
+
+
+
+
+
+                /*for (String s : users) {
+                    System.out.println(s);
+                }
+                for (String t : passwords) {
+                    System.out.println(t);
+                }*/
+
+                String msg = "Successful registration\r\n";
+                outputStream.write(msg.getBytes());
+            } else {
+                String msg = "Unsuccessful registration\r\n";
+                outputStream.write(msg.getBytes());
+                System.err.println("Registration failed for " + user);
+            }
+
+
+
+
+            String msg = "User added to database: " + user + "\r\n";
+            outputStream.write(msg.getBytes());
+        }
     }
 
     private void handleLeave(String[] tokens) throws IOException {
@@ -135,39 +237,105 @@ public class ServerWorker extends Thread {
         if (tokens.length == 3) {
             String login = tokens[1];
             String password = tokens[2];
-
-            if ((login.equals("guest") && password.equals("guest"))
-                    || (login.equals("jim") && password.equals("jim"))) {
-                String msg = "Login successful\r\n";
-                outputStream.write(msg.getBytes());
-                this.login = login;
-                System.out.println("User logged in successfully: " + login);
+            boolean b = true;
+            ArrayList<String> usersBuffer = new ArrayList<>();
+            ArrayList<String> passwordsBuffer = new ArrayList<>();
 
 
-                List<ServerWorker> workerList = server.getWorkerList();
+            try {
+                File file = new File("Logs/users.txt");
+                FileReader fr = new FileReader(file);
+                BufferedReader br = new BufferedReader(fr);
 
-                // Send current user all other online logins
-                for (ServerWorker worker: workerList) {
-                    if (worker.getLogin() != null) {
-                        if (!login.equals(worker.getLogin())) {
-                            String msg2 = "Online " + worker.getLogin() + "\r\n";
-                            send(msg2);
+                String line;
+                while ((line = br.readLine()) != null) {
+                    //System.out.println(line);
+                    usersBuffer.add(line);
+                }
+                fr.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                File file = new File("Logs/passwords.txt");
+                FileReader fr = new FileReader(file);
+                BufferedReader br = new BufferedReader(fr);
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    passwordsBuffer.add(line);
+                }
+                fr.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
+
+            for (int i = 0; i < usersBuffer.size(); i++) {
+                if ((login.equals(usersBuffer.get(i)) && password.equals(passwordsBuffer.get(i)))
+                    /*|| (login.equals("guest") && password.equals("guest"))
+                        || (login.equals("jim") && password.equals("jim"))*/) {
+                    b = false;
+                    String msg = "Login successful\r\n";
+                    outputStream.write(msg.getBytes());
+                    this.login = login;
+                    System.out.println("User logged in successfully: " + login);
+
+
+                    List<ServerWorker> workerList = server.getWorkerList();
+
+                    // Send current user all other online logins
+                    for (ServerWorker worker: workerList) {
+                        if (worker.getLogin() != null) {
+                            if (!login.equals(worker.getLogin())) {
+                                String msg2 = "Online " + worker.getLogin() + "\r\n";
+                                send(msg2);
+                            }
                         }
                     }
-                }
-                // Send other online users current user's status
-                String onlineMsg = "Online " + login + "\r\n";
-                for (ServerWorker worker: workerList) {
-                    if (!login.equals(worker.getLogin())) {
-                        worker.send(onlineMsg);
+                    // Send other online users current user's status
+                    String onlineMsg = "Online " + login + "\r\n";
+                    for (ServerWorker worker: workerList) {
+                        if (!login.equals(worker.getLogin())) {
+                            worker.send(onlineMsg);
+                        }
                     }
-                }
 
-            } else {
+                } /*else {
+                    String msg = "Unsuccessful login\r\n";
+                    outputStream.write(msg.getBytes());
+                    System.err.println("Login failed for " + login);
+                }*/
+            }
+            if (b) {
+
+                /*for (String s : users) {
+                    System.out.println(s);
+                }
+                for (String t : passwords) {
+                    System.out.println(t);
+                }*/
+
                 String msg = "Unsuccessful login\r\n";
                 outputStream.write(msg.getBytes());
                 System.err.println("Login failed for " + login);
             }
+
+
+
+
+
+
+
+
+
+
+
         }
     }
 

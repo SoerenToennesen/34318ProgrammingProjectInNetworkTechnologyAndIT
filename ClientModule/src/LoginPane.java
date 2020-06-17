@@ -33,7 +33,9 @@ public class LoginPane extends JFrame {
         });
 
         getContentPane().add(jPanel, BorderLayout.CENTER);
-        pack(); //sizes the window to fit all the components automatically
+        setSize(300,200);
+        //pack(); //sizes the window to fit all the components automatically
+        setLocationRelativeTo(null);
         setVisible(true);
 
     }
@@ -50,6 +52,7 @@ public class LoginPane extends JFrame {
                 frame.setSize(400,600);
 
                 frame.getContentPane().add(userListPane, BorderLayout.CENTER);
+                frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
 
                 setVisible(false);
