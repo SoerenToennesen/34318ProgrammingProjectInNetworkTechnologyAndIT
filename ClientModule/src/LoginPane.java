@@ -10,11 +10,12 @@ public class LoginPane extends JFrame {
     JTextField loginField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
     JButton loginButton = new JButton("Login");
+    JButton backButton = new JButton("Back");
 
     LoginPane() throws IOException {
         super("Login");
         
-        this.client = new ClientMain("localhost", 8818);
+        this.client = new ClientMain("localhost", 1234);
         client.connect();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,6 +25,7 @@ public class LoginPane extends JFrame {
         jPanel.add(loginField);
         jPanel.add(passwordField);
         jPanel.add(loginButton);
+        jPanel.add(backButton);
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -31,6 +33,20 @@ public class LoginPane extends JFrame {
                 doLogin();
             }
         });
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    dispose();
+                    ClientStart clientStart = new ClientStart();
+                    clientStart.setVisible(true);
+                } catch (IOException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
+
 
         getContentPane().add(jPanel, BorderLayout.CENTER);
         setSize(300,200);

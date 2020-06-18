@@ -21,7 +21,7 @@ public class ClientMain {
         this.serverPort = serverPort;
     }
     public static void main(String[] args) throws IOException {
-        ClientMain client = new ClientMain("localhost", 8818);
+        ClientMain client = new ClientMain("localhost", 1234);
         //addUserStatusListener tells you the presence of a user when they go online/offline
         client.addUserStatusListener(new UserStatusListener() {
             @Override
@@ -71,6 +71,12 @@ public class ClientMain {
     }
 
 
+    public void join(String chatroomName) throws IOException {
+        String cmd = "join " + chatroomName;
+        serverOut.write(cmd.getBytes());
+    }
+
+
     public boolean create(String user, String password) throws IOException {
         String cmd = "create " + user + " " + password + "\r\n";
         //System.out.println(user + password);
@@ -100,8 +106,6 @@ public class ClientMain {
 
         String cmd = "login " + login + " " + password + "\r\n";
         serverOut.write(cmd.getBytes());
-        //String wordword = "hello motherfucker";
-        //serverOut.write(wordword.getBytes());
 
         String response = bufferedIn.readLine();
         System.out.println("Response line: " + response);

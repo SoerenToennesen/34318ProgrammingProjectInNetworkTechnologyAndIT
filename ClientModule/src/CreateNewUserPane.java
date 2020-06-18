@@ -18,7 +18,7 @@ public class CreateNewUserPane extends JFrame {
 
     CreateNewUserPane() throws IOException {
         super("Create new user");
-        this.client = new ClientMain("localhost", 8818);
+        this.client = new ClientMain("localhost", 1234);
         client.connect();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,26 +58,26 @@ public class CreateNewUserPane extends JFrame {
 
                 setVisible(false);
 
-                System.out.println("hellothereeverybody4");
+                //System.out.println("hellothereeverybody4");
                 ClientStart clientStart = new ClientStart();
                 JFrame frame = new JFrame("Main menu");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(300,200);
-                System.out.println("hellothereeverybody5");
+                //System.out.println("hellothereeverybody5");
                 frame.getContentPane().add(clientStart, BorderLayout.CENTER);
-                System.out.println("hellothereeverybody6");
+                //System.out.println("hellothereeverybody6");
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
-                System.out.println("hellothereeverybody1");
+                //System.out.println("hellothereeverybody1");
 
                 setVisible(false);
 
-                System.out.println("hellothereeverybody2");
+                //System.out.println("hellothereeverybody2");
             } else {
                 JOptionPane.showMessageDialog(this, "Username already exists");
             }
         } catch (IOException e) {
-            System.out.println("hellothereeverybody3");
+            //System.out.println("hellothereeverybody3");
             e.printStackTrace();
         }
 
