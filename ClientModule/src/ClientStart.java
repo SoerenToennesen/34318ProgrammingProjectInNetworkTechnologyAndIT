@@ -14,7 +14,7 @@ public class ClientStart extends JFrame {
 
 
     ClientStart() throws IOException {
-        super("Program start");
+        super("Main menu");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel jPanel = new JPanel();

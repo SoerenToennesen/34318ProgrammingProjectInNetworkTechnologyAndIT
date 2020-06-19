@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class CreateChatroomPane extends JFrame {
+public class CreateChatroomPane extends JPanel {
 
 
     //JFrame frame;
@@ -85,6 +85,5 @@ public class CreateChatroomPane extends JFrame {
 
 
 }
-
 
  */

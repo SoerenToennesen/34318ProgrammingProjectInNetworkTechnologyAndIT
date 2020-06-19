@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
-public class MessagePane extends JPanel implements MessageListener {
+public class ChatroomPane extends JPanel implements ChatroomMessageListener {
 
     private final ClientMain client;
     private final String login;
@@ -16,16 +16,19 @@ public class MessagePane extends JPanel implements MessageListener {
     private DefaultListModel<String> listModel = new DefaultListModel<>();
     private JList<String> messageList = new JList<>(listModel);
     private JTextField inputField = new JTextField();
+    //private JButton leaveButton = new JButton("Leave chatroom");
 
-    public MessagePane(ClientMain client, String login) {
+    public ChatroomPane(ClientMain client, String login) throws IOException {
         this.client = client;
         this.login = login;
 
-        client.addMessageListener(this);
+        client.addChatroomMessageListener(this);
+        client.join(login);
 
         setLayout(new BorderLayout());
         add(new JScrollPane(messageList), BorderLayout.CENTER);
         add(inputField, BorderLayout.SOUTH);
+        //add(leaveButton, BorderLayout.SOUTH);
 
         inputField.addActionListener(new ActionListener() {
             @Override
@@ -42,15 +45,35 @@ public class MessagePane extends JPanel implements MessageListener {
             }
         });
 
+        /*leaveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    client.leave(login);
+                } catch (IOException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
+
+         */
+
     }
 
     @Override
-    public void onMessage(String fromLogin, String messageBody) {
-        if (login.equalsIgnoreCase(fromLogin)) {
+    public void onChatroomMessage(String fromLogin, String messageBody) {
+
+        String line = fromLogin + ": " + messageBody;
+        //listModel is the conversation
+        listModel.addElement(line);
+
+        /*if (login.equalsIgnoreCase(fromLogin)) {
             String line = fromLogin + ": " + messageBody;
             //listModel is the conversation
             listModel.addElement(line);
         }
+
+         */
 
 
     }

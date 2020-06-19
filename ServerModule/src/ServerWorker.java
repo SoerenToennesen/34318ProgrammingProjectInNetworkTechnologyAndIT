@@ -64,6 +64,8 @@ public class ServerWorker extends Thread {
                     handleLeave(tokens);
                 } else if ("create".equalsIgnoreCase(cmd)) {
                     handleCreate(tokens);
+                } else if ("othersjoin".equalsIgnoreCase(cmd)) {
+                    handleOthersJoin(tokens);
                 }
                 else {
                     String msg = "Unknown command: " + cmd + "\r\n";
@@ -187,6 +189,34 @@ public class ServerWorker extends Thread {
 
     }
 
+    private void handleOthersJoin(String[] tokens) throws IOException {
+        if (tokens.length > 1) {
+            String topic = tokens[1];
+            List<ServerWorker> workerList = server.getWorkerList();
+            /*
+            // Send current user all other online logins
+            for (ServerWorker worker: workerList) {
+                if (worker.getLogin() != null) {
+                    if (!login.equals(worker.getLogin())) {
+
+
+                        //handleJoin(new String[]{"join", topic});
+
+                        String msg = "Joined chatroom: " + topic + "\r\n";
+                        outputStream.write(msg.getBytes());
+                        topicSet.add(topic);
+
+
+                        String msg2 = "Online " + worker.getLogin() + "\r\n";
+                        send(msg2);
+                    }
+                }
+            }
+
+             */
+        }
+    }
+
     // Format: "Message" "login" body...
     // Format: "Message" "#topic" body...
     private void handleMessage(String[] tokens) throws IOException {
@@ -201,7 +231,7 @@ public class ServerWorker extends Thread {
 
             if (isTopic) {
                 if (worker.isMemberOfTopic(sendTo)) {
-                    String outMsg = "Message from " + login + " to " + sendTo + ": " + body + "\r\n";
+                    String outMsg = "Message from " + login + " to " + sendTo + " " + body + "\r\n";
                     worker.send(outMsg);
                 }
             } else {

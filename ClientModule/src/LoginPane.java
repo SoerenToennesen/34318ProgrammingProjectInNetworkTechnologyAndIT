@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class LoginPane extends JFrame {
+public class LoginPane extends JPanel {
 
     private final ClientMain client;
     JTextField loginField = new JTextField();
@@ -12,20 +12,31 @@ public class LoginPane extends JFrame {
     JButton loginButton = new JButton("Login");
     JButton backButton = new JButton("Back");
 
-    LoginPane() throws IOException {
-        super("Login");
+    public LoginPane() throws IOException {
+        //super("Login");
         
         this.client = new ClientMain("localhost", 1234);
         client.connect();
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        /*
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
         jPanel.add(loginField);
         jPanel.add(passwordField);
         jPanel.add(loginButton);
         jPanel.add(backButton);
+
+         */
+
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(loginField);
+        add(passwordField);
+        add(loginButton);
+        add(backButton);
+
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -38,7 +49,11 @@ public class LoginPane extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    dispose();
+
+                    //dispose();
+                    setVisibleParentFrame();
+
+
                     ClientStart clientStart = new ClientStart();
                     clientStart.setVisible(true);
                 } catch (IOException e2) {
@@ -48,11 +63,19 @@ public class LoginPane extends JFrame {
         });
 
 
-        getContentPane().add(jPanel, BorderLayout.CENTER);
+        /*getContentPane().add(jPanel, BorderLayout.CENTER);
         setSize(300,200);
         //pack(); //sizes the window to fit all the components automatically
         setLocationRelativeTo(null);
         setVisible(true);
+
+         */
+
+        //add(this, BorderLayout.CENTER);
+        //setSize(300,200);
+        //pack(); //sizes the window to fit all the components automatically
+        //setLocationRelativeTo(null);
+        //setVisible(true);
 
     }
 
@@ -81,9 +104,27 @@ public class LoginPane extends JFrame {
 
     }
 
+    public void setVisibleParentFrame() {
+        JFrame parent = (JFrame) this.getTopLevelAncestor();
+        parent.setVisible(false);
+    }
+
     public static void main(String[] args) throws IOException {
+
+
+        LoginPane loginPane = new LoginPane();
+        JFrame frame = new JFrame("Login");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300,200);
+        frame.getContentPane().add(loginPane, BorderLayout.CENTER);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+        /*
         LoginPane loginPane = new LoginPane();
         loginPane.setVisible(true);
+
+         */
 
     }
 }

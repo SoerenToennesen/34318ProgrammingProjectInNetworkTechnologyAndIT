@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CreateNewUserPane extends JFrame {
+public class CreateNewUserPane extends JPanel {
 
     private final ClientMain client;
 
@@ -17,17 +17,25 @@ public class CreateNewUserPane extends JFrame {
     JButton createButton = new JButton("Create user");
 
     CreateNewUserPane() throws IOException {
-        super("Create new user");
+        //super("Create new user");
         this.client = new ClientMain("localhost", 1234);
         client.connect();
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        /*
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
         jPanel.add(loginField);
         jPanel.add(passwordField);
         jPanel.add(createButton);
+
+         */
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(loginField);
+        add(passwordField);
+        add(createButton);
 
         createButton.addActionListener(new ActionListener() {
             @Override
@@ -39,12 +47,14 @@ public class CreateNewUserPane extends JFrame {
                 }
             }
         });
-
+        /*
         getContentPane().add(jPanel, BorderLayout.CENTER);
         setSize(300,200);
         //pack(); //sizes the window to fit all the components automatically
         setLocationRelativeTo(null);
         setVisible(true);
+
+         */
 
 
     }
@@ -54,30 +64,33 @@ public class CreateNewUserPane extends JFrame {
         String password = passwordField.getText();
 
         try {
-            if (client.create(login, password)) {
+            if (login.equals("") || password.equals("")) {
+                loginField.setText("");
+                passwordField.setText("");
+                JOptionPane.showMessageDialog(this, "Please fill in all fields");
+            } else if (client.create(login, password)) {
 
-                setVisible(false);
+                setVisibleParentFrame();
 
-                //System.out.println("hellothereeverybody4");
                 ClientStart clientStart = new ClientStart();
+                clientStart.setVisible(true);
+
+                /*ClientStart clientStart = new ClientStart();
                 JFrame frame = new JFrame("Main menu");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(300,200);
-                //System.out.println("hellothereeverybody5");
                 frame.getContentPane().add(clientStart, BorderLayout.CENTER);
-                //System.out.println("hellothereeverybody6");
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
-                //System.out.println("hellothereeverybody1");
 
-                setVisible(false);
-
-                //System.out.println("hellothereeverybody2");
+                setVisible(false);*/
             } else {
+
+                loginField.setText("");
+                passwordField.setText("");
                 JOptionPane.showMessageDialog(this, "Username already exists");
             }
         } catch (IOException e) {
-            //System.out.println("hellothereeverybody3");
             e.printStackTrace();
         }
 
@@ -85,9 +98,28 @@ public class CreateNewUserPane extends JFrame {
 
 
     }
+
+    public void dispose() {
+        JFrame parent = (JFrame) this.getTopLevelAncestor();
+        parent.dispose();
+    }
+
+    public void setVisibleParentFrame() {
+        JFrame parent = (JFrame) this.getTopLevelAncestor();
+        parent.setVisible(false);
+    }
+
     public static void main(String[] args) throws IOException {
+        /*CreateNewUserPane createNewUserPane = new CreateNewUserPane();
+        createNewUserPane.setVisible(true);*/
+
         CreateNewUserPane createNewUserPane = new CreateNewUserPane();
-        createNewUserPane.setVisible(true);
+        JFrame frame = new JFrame("Register user");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300,200);
+        frame.getContentPane().add(createNewUserPane, BorderLayout.CENTER);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
 
     }
 

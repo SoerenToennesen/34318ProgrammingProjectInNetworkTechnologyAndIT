@@ -14,6 +14,8 @@ public class ClientMain {
     private BufferedReader bufferedIn;
 
     private ArrayList<UserStatusListener> userStatusListeners = new ArrayList<>();
+    private ArrayList<ChatroomStatusListener> chatroomStatusListeners = new ArrayList<>();
+    private ArrayList<ChatroomMessageListener> chatroomMessageListeners = new ArrayList<>();
     private ArrayList<MessageListener> messageListeners = new ArrayList<>();
 
     public ClientMain(String serverName, int serverPort) {
@@ -34,6 +36,19 @@ public class ClientMain {
                 System.out.println("OFFLINE: " + login);
             }
         });
+
+        client.addChatroomStatusListener(new ChatroomStatusListener() {
+            @Override
+            public void online(String login) {
+                System.out.println("ONLINE: " + login);
+            }
+
+            @Override
+            public void offline(String login) {
+                System.out.println("OFFLINE: " + login);
+            }
+        });
+
         //call-back when another user sends a message to this user
         client.addMessageListener(new MessageListener() {
             @Override
@@ -42,6 +57,15 @@ public class ClientMain {
                 System.out.println("Message from " + fromLogin + " " + messageBody);
             }
         });
+
+        client.addChatroomMessageListener(new ChatroomMessageListener() {
+            @Override
+            public void onChatroomMessage(String fromLogin, String messageBody) {
+                //System.out.println(fromLogin);
+                System.out.println("Message from " + fromLogin + " " + messageBody);
+            }
+        });
+
 
         //After you connect you can login, and after you login you can send messages
         if (!client.connect()) {
@@ -76,20 +100,22 @@ public class ClientMain {
         serverOut.write(cmd.getBytes());
     }
 
+    public void restJoin(String chatroomName) throws IOException {
+        String cmd = "othersjoin " + chatroomName;
+        serverOut.write(cmd.getBytes());
+    }
+
+    public void leave(String chatroomName) throws IOException {
+        String cmd = "leave " + chatroomName;
+        serverOut.write(cmd.getBytes());
+    }
+
 
     public boolean create(String user, String password) throws IOException {
         String cmd = "create " + user + " " + password + "\r\n";
-        //System.out.println(user + password);
         serverOut.write(cmd.getBytes());
-        System.out.println("");
         String response = bufferedIn.readLine();
         System.out.println("Response line: " + response);
-        System.out.println("hi im here");
-        System.out.print(response + "hello");
-        //System.out.println("hithere2");
-        System.out.print(response);
-        //System.out.println("hithere3");
-        System.out.println(response);
 
         if ("Successful registration".equalsIgnoreCase(response)) {
             return true;
@@ -141,8 +167,18 @@ public class ClientMain {
                     } else if ("offline".equalsIgnoreCase(cmd)) {
                         handleOffline(tokens);
                     } else if ("message".equalsIgnoreCase(cmd)) {
-                        String[] tokensMsg = StringUtils.split(line, null, 4);
-                        handleMessage(tokensMsg);
+
+                        String check = tokens[3];
+                        if (check.equals("to")) {
+                            String[] tokensMsg = StringUtils.split(line, null, 6);
+                            handleMessage(tokensMsg);
+                        } else {
+                            String[] tokensMsg = StringUtils.split(line, null, 4);
+                            handleMessage(tokensMsg);
+                        }
+
+
+
                     }
                 }
             }
@@ -162,13 +198,31 @@ public class ClientMain {
     // [message, jim, hello whats up]
 
     private void handleMessage(String[] tokensMsg) {
+        String check = tokensMsg[3];
+        if (check.equals("to")) {
+            //String login = tokensMsg[2];
+            String sendTo = tokensMsg[4];
+            String messageBody = tokensMsg[5];
+            for (MessageListener listener : messageListeners) {
+                listener.onMessage(sendTo, messageBody);
+            }
+        } else {
+            String login = tokensMsg[2];
+            String messageBody = tokensMsg[3];
+            for (MessageListener listener : messageListeners) {
+                listener.onMessage(login, messageBody);
+            }
+        }
 
-        String login = tokensMsg[2];
+
+
+        /*String login = tokensMsg[2];
         String messageBody = tokensMsg[3];
 
         for (MessageListener listener : messageListeners) {
             listener.onMessage(login, messageBody);
         }
+         */
 
     }
 
@@ -179,11 +233,18 @@ public class ClientMain {
         }
     }
 
-    private void handleOnline(String[] tokens) {
+    public void handleOnline(String[] tokens) {
         String login = tokens[1];
-        for (UserStatusListener listener : userStatusListeners) {
-            listener.online(login);
+        if (login.substring(0,1).equals("#")) {
+            for (ChatroomStatusListener listener : chatroomStatusListeners) {
+                listener.online(login);
+            }
+        } else {
+            for (UserStatusListener listener : userStatusListeners) {
+                listener.online(login);
+            }
         }
+
     }
 
     public boolean connect() throws IOException {
@@ -211,9 +272,20 @@ public class ClientMain {
     public void addUserStatusListener(UserStatusListener listener) {
         userStatusListeners.add(listener);
     }
+    public void addChatroomStatusListener(ChatroomStatusListener listener) {
+        chatroomStatusListeners.add(listener);
+    }
     public void removeUserStatusListener(UserStatusListener listener) {
         userStatusListeners.remove(listener);
     }
+
+    public void addChatroomMessageListener(ChatroomMessageListener listener) {
+        chatroomMessageListeners.add(listener);
+    }
+    public void removeChatroomMessageListener(ChatroomMessageListener listener) {
+        chatroomMessageListeners.remove(listener);
+    }
+
     public void addMessageListener(MessageListener listener) {
         messageListeners.add(listener);
     }
@@ -221,4 +293,12 @@ public class ClientMain {
         messageListeners.remove(listener);
     }
 
+
+    /*public String[] checkAllOnline() {
+
+
+
+    }
+
+     */
 }
