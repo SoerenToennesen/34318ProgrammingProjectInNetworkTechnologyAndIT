@@ -192,11 +192,6 @@ public class ClientMain {
         }
     }
 
-
-    // message jim hello whats up
-    // [message, jim, hello, whats, up]
-    // [message, jim, hello whats up]
-
     private void handleMessage(String[] tokensMsg) {
         String check = tokensMsg[3];
         if (check.equals("to")) {
@@ -213,16 +208,6 @@ public class ClientMain {
                 listener.onMessage(login, messageBody);
             }
         }
-
-
-
-        /*String login = tokensMsg[2];
-        String messageBody = tokensMsg[3];
-
-        for (MessageListener listener : messageListeners) {
-            listener.onMessage(login, messageBody);
-        }
-         */
 
     }
 
@@ -254,12 +239,10 @@ public class ClientMain {
             this.serverOut = socket.getOutputStream();
             this.serverIn = socket.getInputStream();
             this.bufferedIn = new BufferedReader(new InputStreamReader(serverIn));
-            //socket.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //socket.close();
         return false;
 
     }

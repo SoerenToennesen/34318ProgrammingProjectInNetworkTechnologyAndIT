@@ -6,8 +6,6 @@ import java.io.IOException;
 
 public class ClientStart extends JFrame {
 
-    //private final ClientMain client;
-
     JButton loginButton = new JButton("Login");
     JButton createNewUser = new JButton("Create new user");
     JButton exit = new JButton("Exit");
@@ -48,6 +46,7 @@ public class ClientStart extends JFrame {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //socket.close();
                 System.exit(0);
             }
         });

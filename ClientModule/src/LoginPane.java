@@ -13,22 +13,9 @@ public class LoginPane extends JPanel {
     JButton backButton = new JButton("Back");
 
     public LoginPane() throws IOException {
-        //super("Login");
         
         this.client = new ClientMain("localhost", 1234);
         client.connect();
-
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        /*
-        JPanel jPanel = new JPanel();
-        jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
-        jPanel.add(loginField);
-        jPanel.add(passwordField);
-        jPanel.add(loginButton);
-        jPanel.add(backButton);
-
-         */
 
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -62,21 +49,6 @@ public class LoginPane extends JPanel {
             }
         });
 
-
-        /*getContentPane().add(jPanel, BorderLayout.CENTER);
-        setSize(300,200);
-        //pack(); //sizes the window to fit all the components automatically
-        setLocationRelativeTo(null);
-        setVisible(true);
-
-         */
-
-        //add(this, BorderLayout.CENTER);
-        //setSize(300,200);
-        //pack(); //sizes the window to fit all the components automatically
-        //setLocationRelativeTo(null);
-        //setVisible(true);
-
     }
 
     private void doLogin() {
@@ -84,7 +56,10 @@ public class LoginPane extends JPanel {
         String password = passwordField.getText();
 
         try {
-            if (client.login(login, password)) {
+            if (login.equals("") || password.equals("")) {
+
+            } else if (client.login(login, password)) {
+
                 UserListPane userListPane = new UserListPane(client);
                 JFrame frame = new JFrame("User List");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,12 +94,6 @@ public class LoginPane extends JPanel {
         frame.getContentPane().add(loginPane, BorderLayout.CENTER);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        /*
-        LoginPane loginPane = new LoginPane();
-        loginPane.setVisible(true);
-
-         */
 
     }
 }

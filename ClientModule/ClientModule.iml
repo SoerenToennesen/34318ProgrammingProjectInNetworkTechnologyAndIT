@@ -7,8 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="commons-lang3-3.101" level="project" />
-    <orderEntry type="library" name="commons-lang3-3" level="project" />
     <orderEntry type="module" module-name="ServerModule" />
+    <orderEntry type="library" name="commons-lang3-3" level="project" />
   </component>
 </module>

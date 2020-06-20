@@ -16,7 +16,6 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener {
     private DefaultListModel<String> listModel = new DefaultListModel<>();
     private JList<String> messageList = new JList<>(listModel);
     private JTextField inputField = new JTextField();
-    //private JButton leaveButton = new JButton("Leave chatroom");
 
     public ChatroomPane(ClientMain client, String login) throws IOException {
         this.client = client;
@@ -28,7 +27,6 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener {
         setLayout(new BorderLayout());
         add(new JScrollPane(messageList), BorderLayout.CENTER);
         add(inputField, BorderLayout.SOUTH);
-        //add(leaveButton, BorderLayout.SOUTH);
 
         inputField.addActionListener(new ActionListener() {
             @Override
@@ -45,36 +43,11 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener {
             }
         });
 
-        /*leaveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    client.leave(login);
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                }
-            }
-        });
-
-         */
-
     }
 
     @Override
     public void onChatroomMessage(String fromLogin, String messageBody) {
-
         String line = fromLogin + ": " + messageBody;
-        //listModel is the conversation
         listModel.addElement(line);
-
-        /*if (login.equalsIgnoreCase(fromLogin)) {
-            String line = fromLogin + ": " + messageBody;
-            //listModel is the conversation
-            listModel.addElement(line);
-        }
-
-         */
-
-
     }
 }

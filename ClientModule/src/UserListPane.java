@@ -33,9 +33,6 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         this.client.addUserStatusListener(this);
         this.client.addChatroomStatusListener(this);
 
-        //userListModel = new DefaultListModel<>();
-        //userListUI = new JList<>(userListModel);
-
         pane1 = new JPanel();
         pane2 = new JPanel();
         pane3 = new JPanel();
@@ -59,14 +56,6 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         add(pane1, BorderLayout.PAGE_START);
         add(pane2, BorderLayout.PAGE_END);
         add(pane3, BorderLayout.PAGE_END);
-
-
-        /*String[] allOnline = client.checkAllOnline();
-        for (int i = 0; i < allOnline.length; i++) {
-            client.handleOnline(x);
-        }
-
-         */
 
         for (int i = 0; i < chatroomListModel.getSize(); i++) {
             client.join(chatroomListModel.get(i));
@@ -123,21 +112,6 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
                     }
             }
         });
-
-
-
-        /*logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                try {
-                    client.logoff();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.exit(0);
-            }
-        });
-         */
 
 
         userListUI.addMouseListener(new MouseAdapter() {

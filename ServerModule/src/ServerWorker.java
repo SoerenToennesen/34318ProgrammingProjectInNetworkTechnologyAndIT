@@ -16,19 +16,10 @@ public class ServerWorker extends Thread {
     private String login = null;
     private OutputStream outputStream;
     private HashSet<String> topicSet = new HashSet<>();
-    //private ArrayList<String> users = new ArrayList<>();
-    //private ArrayList<String> passwords = new ArrayList<>();
-
-
 
     public ServerWorker(Server server, Socket clientSocket) {
         this.server = server;
         this.clientSocket = clientSocket;
-
-        /*users.add("guest");
-        passwords.add("guest");
-        users.add("jim");
-        passwords.add("jim");*/
     }
 
     @Override
@@ -84,7 +75,7 @@ public class ServerWorker extends Thread {
 
             ArrayList<String> usersBuffer = new ArrayList<>();
             try {
-                File file = new File("Logs/users.txt");
+                File file = new File("ServerModule/Logs/users.txt");
                 FileReader fr = new FileReader(file);
                 BufferedReader br = new BufferedReader(fr);
 
@@ -104,11 +95,11 @@ public class ServerWorker extends Thread {
                 //users.add(user);
                 //passwords.add(password);
 
-                File usersFile = new File("Logs/users.txt");
-                File passwordsFile = new File("Logs/passwords.txt");
+                File usersFile = new File("ServerModule/Logs/users.txt");
+                File passwordsFile = new File("ServerModule/Logs/passwords.txt");
                 if(usersFile.exists() && passwordsFile.exists() && !usersFile.isDirectory()) {
                     //System.out.println("notnotnot");
-                    try(FileWriter fw = new FileWriter("Logs/users.txt", true);
+                    try(FileWriter fw = new FileWriter("ServerModule/Logs/users.txt", true);
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter out = new PrintWriter(bw))
                     {
@@ -117,7 +108,7 @@ public class ServerWorker extends Thread {
                         e.printStackTrace();
                     }
 
-                    try(FileWriter fw = new FileWriter("Logs/passwords.txt", true);
+                    try(FileWriter fw = new FileWriter("ServerModule/Logs/passwords.txt", true);
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter out = new PrintWriter(bw))
                     {
@@ -127,12 +118,12 @@ public class ServerWorker extends Thread {
                     }
                 } else {
                     try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                            new FileOutputStream("Logs/users.txt"), "utf-8"))) {
+                            new FileOutputStream("ServerModule/Logs/users.txt"), "utf-8"))) {
                         writer.write(user + "\r\n");
                     }
 
                     try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                            new FileOutputStream("Logs/passwords.txt"), "utf-8"))) {
+                            new FileOutputStream("ServerModule/Logs/passwords.txt"), "utf-8"))) {
                         //System.out.println("yoyoyo");
                         writer.write(password + "\r\n");
                     }
@@ -273,7 +264,7 @@ public class ServerWorker extends Thread {
 
 
             try {
-                File file = new File("Logs/users.txt");
+                File file = new File("ServerModule/Logs/users.txt");
                 FileReader fr = new FileReader(file);
                 BufferedReader br = new BufferedReader(fr);
 
@@ -288,7 +279,7 @@ public class ServerWorker extends Thread {
             }
 
             try {
-                File file = new File("Logs/passwords.txt");
+                File file = new File("ServerModule/Logs/passwords.txt");
                 FileReader fr = new FileReader(file);
                 BufferedReader br = new BufferedReader(fr);
 

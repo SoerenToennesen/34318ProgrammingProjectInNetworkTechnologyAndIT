@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
@@ -35,6 +38,11 @@ public class MessagePane extends JPanel implements MessageListener {
                     client.message(login, text);
                     listModel.addElement(""
                             + "You: " + text);
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+                    String currentTime = "<html><font color=\"green\">--- Sent at " + dateFormat.format(date) + "</font></html>";
+                    listModel.addElement(currentTime);
                     inputField.setText("");
                 } catch (IOException e2) {
                     e2.printStackTrace();
@@ -47,11 +55,14 @@ public class MessagePane extends JPanel implements MessageListener {
     @Override
     public void onMessage(String fromLogin, String messageBody) {
         if (login.equalsIgnoreCase(fromLogin)) {
-            String line = fromLogin + ": " + messageBody;
-            //listModel is the conversation
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            //System.out.println(dateFormat.format(date));
+            String line = "<html><font color=\"blue\">" + fromLogin + ": " + messageBody + "</font></html>";
             listModel.addElement(line);
+            String currentTime = "<html><font color=\"green\">--- Sent at " + dateFormat.format(date) + "</font></html>";
+            listModel.addElement(currentTime);
         }
-
-
     }
 }
