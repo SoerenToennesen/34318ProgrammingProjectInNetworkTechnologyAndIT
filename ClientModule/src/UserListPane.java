@@ -12,7 +12,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
     private final ClientMain client;
 
-    private JPanel pane1, pane2, pane3;
+    private JPanel pane1, pane2;
 
     private DefaultListModel<String> userListModel = new DefaultListModel<>();
     private JList<String> userListUI = new JList<>(userListModel);
@@ -35,27 +35,28 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
         pane1 = new JPanel();
         pane2 = new JPanel();
-        pane3 = new JPanel();
 
 
-        //pane1.setLayout(new BorderLayout());
-        pane1.setLayout(new BoxLayout(pane1, BoxLayout.PAGE_AXIS));
+        setLayout(new GridLayout(0,2));
         pane1.add(usersLabel);
-        pane1.add(new JScrollPane(userListUI), BorderLayout.CENTER);
+        pane1.add(new JScrollPane(userListUI));
 
-        pane2.setLayout(new BoxLayout(pane2, BoxLayout.PAGE_AXIS));
         pane2.add(chatroomsLabel);
         pane2.add(new JScrollPane(chatroomListUI));
         pane2.add(chatroomName);
+        chatroomName.setPreferredSize(new Dimension(200,30));
+        
         pane2.add(chatroomButton);
-        //pane2.setLayout(new BoxLayout(pane2, BoxLayout.Y_AXIS));
-        pane3.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        pane3.add(logoutButton, BorderLayout.SOUTH);
+        pane2.add(logoutButton);
+        logoutButton.setBackground(Color.BLACK);
+        logoutButton.setForeground(Color.WHITE);
 
 
-        add(pane1, BorderLayout.PAGE_START);
-        add(pane2, BorderLayout.PAGE_END);
-        add(pane3, BorderLayout.PAGE_END);
+
+        add(pane1);
+        //pane1.setPreferredSize(new Dimension(300,120));
+        add(pane2);
+        //pane2.setPreferredSize(new Dimension(300,240));
 
         for (int i = 0; i < chatroomListModel.getSize(); i++) {
             client.join(chatroomListModel.get(i));
@@ -198,10 +199,10 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         UserListPane userListPane = new UserListPane(client);
         JFrame frame = new JFrame("User List");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400,600);
+        frame.setSize(550,270);
         //frame.pack();
 
-        frame.getContentPane().add(userListPane, BorderLayout.CENTER);
+        frame.getContentPane().add(userListPane);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 

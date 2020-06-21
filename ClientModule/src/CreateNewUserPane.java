@@ -12,7 +12,6 @@ public class CreateNewUserPane extends JPanel {
     JTextField loginField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
     JButton createButton = new JButton("Create user");
-    JButton backButton = new JButton("Back");
 
     CreateNewUserPane() throws IOException {
         this.client = new ClientMain("localhost", 1234);
@@ -21,7 +20,6 @@ public class CreateNewUserPane extends JPanel {
         add(loginField);
         add(passwordField);
         add(createButton);
-        add(backButton);
 
         createButton.addActionListener(new ActionListener() {
             @Override
@@ -30,23 +28,6 @@ public class CreateNewUserPane extends JPanel {
                     doCreateUser();
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                }
-            }
-        });
-
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-
-                    //dispose();
-                    setVisibleParentFrame();
-
-
-                    ClientStart clientStart = new ClientStart();
-                    clientStart.setVisible(true);
-                } catch (IOException e2) {
-                    e2.printStackTrace();
                 }
             }
         });
