@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class ClientStart extends JFrame {
@@ -11,7 +9,7 @@ public class ClientStart extends JFrame {
     JButton exit = new JButton("Exit");
 
 
-    ClientStart() throws IOException {
+    ClientStart() {
         super("Main menu");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,34 +36,13 @@ public class ClientStart extends JFrame {
         exit.setForeground(Color.WHITE);
         //exit.setPreferredSize(new Dimension(1, 31));
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    clickLogin();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+        loginButton.addActionListener(e -> clickLogin());
 
-        createNewUser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    clickCreateNewUser();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+        createNewUser.addActionListener(e -> clickCreateNewUser());
 
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //socket.close();
-                System.exit(0);
-            }
+        exit.addActionListener(e -> {
+            //socket.close();
+            System.exit(0);
         });
 
         getContentPane().add(jPanel, BorderLayout.CENTER);
@@ -77,7 +54,7 @@ public class ClientStart extends JFrame {
 
     }
 
-    private void clickLogin() throws IOException {
+    private void clickLogin() {
 
 
         try {
@@ -99,7 +76,7 @@ public class ClientStart extends JFrame {
 
     }
 
-    private void clickCreateNewUser() throws IOException {
+    private void clickCreateNewUser() {
 
 
         try {
@@ -120,7 +97,7 @@ public class ClientStart extends JFrame {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         ClientStart clientStart = new ClientStart();
         clientStart.setVisible(true);
 

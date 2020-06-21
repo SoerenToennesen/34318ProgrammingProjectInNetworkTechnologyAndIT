@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -37,28 +35,16 @@ public class LoginPane extends JPanel {
         backButton.setForeground(Color.WHITE);
 
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                doLogin();
-            }
-        });
+        loginButton.addActionListener(e -> doLogin());
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
+        backButton.addActionListener(e -> {
 
-                    //dispose();
-                    setVisibleParentFrame();
+            //dispose();
+            setVisibleParentFrame();
 
 
-                    ClientStart clientStart = new ClientStart();
-                    clientStart.setVisible(true);
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                }
-            }
+            ClientStart clientStart = new ClientStart();
+            clientStart.setVisible(true);
         });
 
 
@@ -81,17 +67,20 @@ public class LoginPane extends JPanel {
         });
 
 
+        //checking commit
+
 
 
     }
 
     private void doLogin() {
         String login = loginField.getText();
-        String password = passwordField.getText();
+        String password = String.valueOf(passwordField.getPassword());
+        //String password = passwordField.getText();
 
         try {
             if (login.equals("") || password.equals("")) {
-
+                JOptionPane.showMessageDialog(this, "Please enter a username/password");
             } else if (client.login(login, password)) {
 
                 UserListPane userListPane = new UserListPane(client);

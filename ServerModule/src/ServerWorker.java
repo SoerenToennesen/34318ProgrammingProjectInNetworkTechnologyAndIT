@@ -1,13 +1,11 @@
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.*;
-
-import org.apache.commons.lang3.StringUtils;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 
 public class ServerWorker extends Thread {
@@ -26,12 +24,12 @@ public class ServerWorker extends Thread {
     public void run() {
         try {
             handleClientSocket();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void handleClientSocket() throws IOException, InterruptedException {
+    private void handleClientSocket() throws IOException {
         InputStream inputStream = clientSocket.getInputStream();
         this.outputStream = clientSocket.getOutputStream();
 
@@ -118,12 +116,12 @@ public class ServerWorker extends Thread {
                     }
                 } else {
                     try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                            new FileOutputStream("ServerModule/Logs/users.txt"), "utf-8"))) {
+                            new FileOutputStream("ServerModule/Logs/users.txt"), StandardCharsets.UTF_8))) {
                         writer.write(user + "\r\n");
                     }
 
                     try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                            new FileOutputStream("ServerModule/Logs/passwords.txt"), "utf-8"))) {
+                            new FileOutputStream("ServerModule/Logs/passwords.txt"), StandardCharsets.UTF_8))) {
                         //System.out.println("yoyoyo");
                         writer.write(password + "\r\n");
                     }
@@ -180,7 +178,7 @@ public class ServerWorker extends Thread {
 
     }
 
-    private void handleOthersJoin(String[] tokens) throws IOException {
+    private void handleOthersJoin(String[] tokens) {
         if (tokens.length > 1) {
             String topic = tokens[1];
             List<ServerWorker> workerList = server.getWorkerList();

@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class CreateNewUserPane extends JPanel {
 
@@ -21,22 +18,14 @@ public class CreateNewUserPane extends JPanel {
         add(passwordField);
         add(createButton);
 
-        createButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    doCreateUser();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+        createButton.addActionListener(e -> doCreateUser());
 
     }
 
-    private void doCreateUser() throws IOException {
+    private void doCreateUser() {
         String login = loginField.getText();
-        String password = passwordField.getText();
+        String password = String.valueOf(passwordField.getPassword());
+        //String password = passwordField.getText();
 
         try {
             if (login.equals("") || password.equals("")) {

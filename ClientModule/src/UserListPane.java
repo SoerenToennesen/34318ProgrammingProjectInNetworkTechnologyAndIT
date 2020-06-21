@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -67,63 +66,57 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         }
 
 
-        chatroomButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    ArrayList<String> currentChatrooms = new ArrayList<>();
-                    for (int i = 0; i < chatroomListModel.getSize(); i++) {
-                        currentChatrooms.add(chatroomListModel.get(i));
-                    }
-                    if (chatroomName.getText().equals("")) {
-                        JOptionPane.showMessageDialog(UserListPane.this, "Insert a chatroom name");
-                    } else if (currentChatrooms.contains(chatroomName.getText())) {
-                        JOptionPane.showMessageDialog(UserListPane.this, "Chatroom already exists");
-                        chatroomName.setText("");
-                    } else {
-                        doCreateChatroom();
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+        chatroomButton.addActionListener(e -> {
+            try {
+                ArrayList<String> currentChatrooms = new ArrayList<>();
+                for (int i = 0; i < chatroomListModel.getSize(); i++) {
+                    currentChatrooms.add(chatroomListModel.get(i));
                 }
+                if (chatroomName.getText().equals("")) {
+                    JOptionPane.showMessageDialog(UserListPane.this, "Insert a chatroom name");
+                } else if (currentChatrooms.contains(chatroomName.getText())) {
+                    JOptionPane.showMessageDialog(UserListPane.this, "Chatroom already exists");
+                    chatroomName.setText("");
+                } else {
+                    doCreateChatroom();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         });
 
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    client.logoff();
-                    for (int i = 0; i < chatroomListModel.getSize(); i++) {
-                        client.leave(chatroomListModel.get(i));
-                    }
+        logoutButton.addActionListener(e -> {
+            try {
+                client.logoff();
+                for (int i = 0; i < chatroomListModel.getSize(); i++) {
+                    client.leave(chatroomListModel.get(i));
+                }
 
 
-                    setVisibleParentFrame();
-                    //dispose();
+                setVisibleParentFrame();
+                //dispose();
 
-                    //client.logoff();
-                    LoginPane loginPane = new LoginPane();
-                    JFrame frame = new JFrame("Login");
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.getContentPane().add(loginPane, BorderLayout.CENTER);
-                    frame.setSize(300,200);
-                    //frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
+                //client.logoff();
+                LoginPane loginPane = new LoginPane();
+                JFrame frame = new JFrame("Login");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.getContentPane().add(loginPane, BorderLayout.CENTER);
+                frame.setSize(300,200);
+                //frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
 
 
-                    } catch (IOException e2) {
-                        e2.printStackTrace();
-                    }
-            }
+                } catch (IOException e2) {
+                    e2.printStackTrace();
+                }
         });
 
 
         userListUI.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() > 1) {
+                if (e.getClickCount() > 1 && userListUI.getSelectedValue() != null) {
                     String login = userListUI.getSelectedValue();
                     MessagePane messagePane = new MessagePane(client, login);
 
@@ -141,7 +134,10 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         chatroomListUI.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() > 1) {
+                if (e.getClickCount() > 1 && chatroomListUI.getSelectedValue() != null) {
+
+
+
                     String login = chatroomListUI.getSelectedValue();
                     ChatroomPane chatroomPane = null;
                     try {
@@ -156,6 +152,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
                     frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame2.setSize(500,500);
+                    assert chatroomPane != null;
                     frame2.getContentPane().add(chatroomPane, BorderLayout.CENTER);
                     frame2.setLocationRelativeTo(null);
                     frame2.setVisible(true);
@@ -183,6 +180,51 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                }
+            }
+        });
+
+
+        chatroomListUI.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER && chatroomListUI.getSelectedValue() != null){
+                    String login = chatroomListUI.getSelectedValue();
+                    ChatroomPane chatroomPane = null;
+                    try {
+                        client.join("#" + login);
+
+                        chatroomPane = new ChatroomPane(client, login);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    JFrame frame2 = new JFrame("Message: " + login);
+
+                    frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame2.setSize(500,500);
+                    assert chatroomPane != null;
+                    frame2.getContentPane().add(chatroomPane, BorderLayout.CENTER);
+                    frame2.setLocationRelativeTo(null);
+                    frame2.setVisible(true);
+                }
+            }
+        });
+
+        userListUI.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER && userListUI.getSelectedValue() != null){
+                    String login = userListUI.getSelectedValue();
+                    MessagePane messagePane = new MessagePane(client, login);
+
+                    JFrame frame2 = new JFrame("Message: " + login);
+
+                    frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame2.setSize(500,500);
+                    frame2.getContentPane().add(messagePane, BorderLayout.CENTER);
+                    frame2.setLocationRelativeTo(null);
+                    frame2.setVisible(true);
                 }
             }
         });
