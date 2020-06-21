@@ -175,6 +175,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
     public void doCreateChatroom() throws IOException {
 
         String name = chatroomName.getText();
+        chatroomListModel.addElement(name);
         chatroomName.setText("");
         client.join("#" + name);
         //client.restJoin("#" + name);

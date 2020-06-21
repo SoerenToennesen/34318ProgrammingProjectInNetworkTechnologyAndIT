@@ -58,7 +58,6 @@ public class LoginPane extends JPanel {
                 }
             }
         });
-
     }
 
     private void doLogin() {

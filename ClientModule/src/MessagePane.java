@@ -27,8 +27,9 @@ public class MessagePane extends JPanel implements MessageListener {
         client.addMessageListener(this);
 
         setLayout(new BorderLayout());
-        add(new JScrollPane(messageList));
-        add(inputField);
+        add(new JScrollPane(messageList), BorderLayout.CENTER);
+        add(inputField, BorderLayout.SOUTH);
+
 
         inputField.addActionListener(new ActionListener() {
             @Override
@@ -43,6 +44,7 @@ public class MessagePane extends JPanel implements MessageListener {
                     Date date = new Date();
                     String currentTime = "<html><font color=\"green\">--- Sent at " + dateFormat.format(date) + "</font></html>";
                     listModel.addElement(currentTime);
+
                     inputField.setText("");
                 } catch (IOException e2) {
                     e2.printStackTrace();

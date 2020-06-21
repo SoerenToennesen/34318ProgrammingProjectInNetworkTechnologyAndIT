@@ -72,6 +72,7 @@ public class ClientStart extends JFrame {
         setSize(410,200);
         //pack(); //sizes the window to fit all the components automatically
         setLocationRelativeTo(null);
+        setResizable(false);
         setVisible(true);
 
     }
