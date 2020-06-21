@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class LoginPane extends JPanel {
@@ -58,6 +60,29 @@ public class LoginPane extends JPanel {
                 }
             }
         });
+
+
+        loginField.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    doLogin();
+                }
+            }
+        });
+
+        passwordField.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    doLogin();
+                }
+            }
+        });
+
+
+
+
     }
 
     private void doLogin() {
@@ -72,7 +97,7 @@ public class LoginPane extends JPanel {
                 UserListPane userListPane = new UserListPane(client);
                 JFrame frame = new JFrame("User List");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(400,600);
+                frame.setSize(550,270);
 
                 frame.getContentPane().add(userListPane, BorderLayout.CENTER);
                 frame.setLocationRelativeTo(null);
@@ -100,6 +125,7 @@ public class LoginPane extends JPanel {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(410,230);
+
         frame.getContentPane().add(loginPane, BorderLayout.CENTER);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

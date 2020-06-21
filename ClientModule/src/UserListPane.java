@@ -12,7 +12,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
     private final ClientMain client;
 
-    private JPanel pane1, pane2;
+    private JPanel pane1, pane2, pane3;
 
     private DefaultListModel<String> userListModel = new DefaultListModel<>();
     private JList<String> userListUI = new JList<>(userListModel);
@@ -47,7 +47,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         chatroomName.setPreferredSize(new Dimension(200,30));
         
         pane2.add(chatroomButton);
-        pane2.add(logoutButton);
+        pane1.add(logoutButton);
         logoutButton.setBackground(Color.BLACK);
         logoutButton.setForeground(Color.WHITE);
 
@@ -57,6 +57,10 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         //pane1.setPreferredSize(new Dimension(300,120));
         add(pane2);
         //pane2.setPreferredSize(new Dimension(300,240));
+
+        //add(pane3);
+        //pane2.setPreferredSize(new Dimension(300,240));
+
 
         for (int i = 0; i < chatroomListModel.getSize(); i++) {
             client.join(chatroomListModel.get(i));
@@ -104,6 +108,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     frame.getContentPane().add(loginPane, BorderLayout.CENTER);
                     frame.setSize(300,200);
+                    //frame.pack();
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
 
@@ -158,6 +163,30 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
             }
         });
 
+        chatroomName.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    try {
+                        ArrayList<String> currentChatrooms = new ArrayList<>();
+                        for (int i = 0; i < chatroomListModel.getSize(); i++) {
+                            currentChatrooms.add(chatroomListModel.get(i));
+                        }
+                        if (chatroomName.getText().equals("")) {
+                            JOptionPane.showMessageDialog(UserListPane.this, "Insert a chatroom name");
+                        } else if (currentChatrooms.contains(chatroomName.getText())) {
+                            JOptionPane.showMessageDialog(UserListPane.this, "Chatroom already exists");
+                            chatroomName.setText("");
+                        } else {
+                            doCreateChatroom();
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -175,7 +204,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
     public void doCreateChatroom() throws IOException {
 
         String name = chatroomName.getText();
-        chatroomListModel.addElement(name);
+        //chatroomListModel.addElement(name);
         chatroomName.setText("");
         client.join("#" + name);
         //client.restJoin("#" + name);
