@@ -27,8 +27,8 @@ public class MessagePane extends JPanel implements MessageListener {
         client.addMessageListener(this);
 
         setLayout(new BorderLayout());
-        add(new JScrollPane(messageList), BorderLayout.CENTER);
-        add(inputField, BorderLayout.SOUTH);
+        add(new JScrollPane(messageList));
+        add(inputField);
 
         inputField.addActionListener(new ActionListener() {
             @Override

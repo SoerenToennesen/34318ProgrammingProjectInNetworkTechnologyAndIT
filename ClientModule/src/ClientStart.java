@@ -16,10 +16,27 @@ public class ClientStart extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel jPanel = new JPanel();
-        jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
-        jPanel.add(loginButton);
-        jPanel.add(createNewUser);
-        jPanel.add(exit);
+        jPanel.setBackground(Color.black); 
+        jPanel.setLayout(new BorderLayout());
+        jPanel.add(loginButton,BorderLayout.WEST);
+        jPanel.add(createNewUser,BorderLayout.EAST);
+        jPanel.add(exit,BorderLayout.SOUTH);
+        
+        loginButton.setToolTipText("Login with your email and password");
+        //loginButton.setBackground(Color.BLACK);
+        loginButton.setPreferredSize(new Dimension(200, 50));
+        //loginButton.setForeground(Color.WHITE);
+  
+        
+        createNewUser.setToolTipText("Create a new user");
+        //createNewUser.setBackground(Color.BLACK);
+        createNewUser.setPreferredSize(new Dimension(200, 50));
+        //createNewUser.setForeground(Color.WHITE);
+        
+        exit.setToolTipText("Exit the application");
+        exit.setBackground(Color.BLACK);
+        exit.setForeground(Color.WHITE);
+        //exit.setPreferredSize(new Dimension(1, 31));
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -52,7 +69,7 @@ public class ClientStart extends JFrame {
         });
 
         getContentPane().add(jPanel, BorderLayout.CENTER);
-        setSize(300,200);
+        setSize(410,200);
         //pack(); //sizes the window to fit all the components automatically
         setLocationRelativeTo(null);
         setVisible(true);
