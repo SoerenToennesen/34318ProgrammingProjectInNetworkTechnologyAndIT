@@ -15,14 +15,24 @@ public class LoginPane extends JPanel {
     public LoginPane() throws IOException {
         
         this.client = new ClientMain("localhost", 1234);
-        client.connect();
+        client.connect(); 
 
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new FlowLayout());
         add(loginField);
         add(passwordField);
         add(loginButton);
         add(backButton);
+        
+        loginField.setPreferredSize(new Dimension(200,40));
+        
+        passwordField.setPreferredSize(new Dimension(200,40));
+        
+        loginButton.setPreferredSize(new Dimension(200,30));
+        
+        backButton.setPreferredSize(new Dimension(200, 20));
+        backButton.setBackground(Color.BLACK);
+        backButton.setForeground(Color.WHITE);
 
 
         loginButton.addActionListener(new ActionListener() {
@@ -90,7 +100,7 @@ public class LoginPane extends JPanel {
         LoginPane loginPane = new LoginPane();
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300,200);
+        frame.setSize(410,230);
         frame.getContentPane().add(loginPane, BorderLayout.CENTER);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

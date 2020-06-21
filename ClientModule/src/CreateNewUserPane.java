@@ -12,14 +12,29 @@ public class CreateNewUserPane extends JPanel {
     JTextField loginField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
     JButton createButton = new JButton("Create user");
+    JButton backButton = new JButton("Back");
 
     CreateNewUserPane() throws IOException {
         this.client = new ClientMain("localhost", 1234);
         client.connect();
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        
+        
+        setLayout(new FlowLayout());
         add(loginField);
         add(passwordField);
         add(createButton);
+        add(backButton);
+        
+        loginField.setPreferredSize(new Dimension(200,40));
+        
+        passwordField.setPreferredSize(new Dimension(200,40));
+        
+        createButton.setPreferredSize(new Dimension(200,30));
+        
+        backButton.setPreferredSize(new Dimension(200, 20));
+        backButton.setBackground(Color.BLACK);
+        backButton.setForeground(Color.WHITE);
+        
 
         createButton.addActionListener(new ActionListener() {
             @Override
@@ -28,6 +43,23 @@ public class CreateNewUserPane extends JPanel {
                     doCreateUser();
                 } catch (IOException ex) {
                     ex.printStackTrace();
+                }
+            }
+        });
+        
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+
+                    //dispose();
+                    setVisibleParentFrame();
+
+
+                    ClientStart clientStart = new ClientStart();
+                    clientStart.setVisible(true);
+                } catch (IOException e2) {
+                    e2.printStackTrace();
                 }
             }
         });
