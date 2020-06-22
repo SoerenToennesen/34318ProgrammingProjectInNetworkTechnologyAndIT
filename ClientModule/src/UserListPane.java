@@ -43,7 +43,10 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         pane2.add(chatroomsLabel);
         pane2.add(new JScrollPane(chatroomListUI));
         pane2.add(chatroomName);
+
         chatroomName.setPreferredSize(new Dimension(200,30));
+        chatroomListUI.setPreferredSize(new Dimension(200,5000));
+        userListUI.setPreferredSize(new Dimension(200,5000));
         
         pane2.add(chatroomButton);
         pane1.add(logoutButton);
@@ -312,7 +315,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         UserListPane userListPane = new UserListPane(client);
         JFrame frame = new JFrame("User List");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(550,270);
+        frame.setSize(600,280);
         //frame.pack();
 
         frame.getContentPane().add(userListPane);
