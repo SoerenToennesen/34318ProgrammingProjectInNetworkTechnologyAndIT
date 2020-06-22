@@ -17,6 +17,9 @@ public class Server extends Thread {
         return workerList;
     }
 
+    //MAKE A SERVERCHATROOMWORKERLIST MAYBE(
+    private ArrayList<ServerWorker> chatroomWorkerList = new ArrayList<>();
+
     @Override
     public void run() {
         try {

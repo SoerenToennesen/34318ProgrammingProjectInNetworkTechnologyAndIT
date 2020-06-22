@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class CreateNewUserPane extends JPanel {
@@ -19,6 +21,25 @@ public class CreateNewUserPane extends JPanel {
         add(createButton);
 
         createButton.addActionListener(e -> doCreateUser());
+
+        loginField.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    doCreateUser();
+                }
+            }
+        });
+
+        passwordField.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    doCreateUser();
+                }
+            }
+        });
+
 
     }
 

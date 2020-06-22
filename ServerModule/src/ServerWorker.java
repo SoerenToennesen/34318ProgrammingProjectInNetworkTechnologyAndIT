@@ -53,8 +53,10 @@ public class ServerWorker extends Thread {
                     handleLeave(tokens);
                 } else if ("create".equalsIgnoreCase(cmd)) {
                     handleCreate(tokens);
-                } else if ("othersjoin".equalsIgnoreCase(cmd)) {
+                } /*else if ("othersjoin".equalsIgnoreCase(cmd)) {
                     handleOthersJoin(tokens);
+                } */else if ("chatroomCreate".equalsIgnoreCase(cmd)) {
+                    handleChatroomCreate(tokens);
                 }
                 else {
                     String msg = "Unknown command: " + cmd + "\r\n";
@@ -64,6 +66,85 @@ public class ServerWorker extends Thread {
         }
 
         clientSocket.close();
+    }
+
+    private void handleChatroomCreate(String[] tokens) throws IOException {
+
+        if (tokens.length > 0) {
+            String name = tokens[1];
+
+            ArrayList<String> chatroomsBuffer = new ArrayList<>();
+            try {
+                File file = new File("ServerModule/Logs/chatrooms.txt");
+                FileReader fr = new FileReader(file);
+                BufferedReader br = new BufferedReader(fr);
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    //System.out.println(line);
+                    chatroomsBuffer.add(line);
+                }
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+            if (!chatroomsBuffer.contains(name)) {
+
+                File chatroomsFile = new File("ServerModule/Logs/chatrooms.txt");
+                if (chatroomsFile.exists() && !chatroomsFile.isDirectory()) {
+                    try(FileWriter fw = new FileWriter("ServerModule/Logs/chatrooms.txt", true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter out = new PrintWriter(bw))
+                    {
+                        out.println(name);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                            new FileOutputStream("ServerModule/Logs/chatrooms.txt"), StandardCharsets.UTF_8))) {
+                        writer.write(name + "\r\n");
+                    }
+                }
+
+                // I HAVE NO IDEA WHY, BUT WE NEED TO GIVE THE SERVER A "DUMMY"-MESSAGE
+                // IN ORDER FOR IT TO READ IN THE CORRECT ORDER.
+                // THIS IS INVOKED FROM THE READMESSAGE LOOP
+                String msg3 = "filler stuff yo\r\n";
+                outputStream.write(msg3.getBytes());
+
+                // THIS IS INVOKED FROM THE CREATECHATROOM METHOD
+                String msg = "Successful chatroom creation\r\n";
+                outputStream.write(msg.getBytes());
+            } else {
+                String msg = "Unsuccessful chatroom creation\r\n";
+                outputStream.write(msg.getBytes());
+                System.err.println("Chatroom creation failed for " + name);
+            }
+
+            //String[] executeHandleJoin = {"join", name};
+
+            /*
+            List<ServerWorker> workerList = server.getWorkerList();
+            // Send current user all other online logins
+            for (ServerWorker worker: workerList) {
+                if (worker.getLogin() != null) {
+                    String msg2 = "Join " + worker.getLogin() + "\r\n";
+                    send(msg2);
+                }
+            }
+             */
+
+
+
+            //handleJoin(executeHandleJoin);
+
+            String msg = "Chatroom added to database: " + name + "\r\n";
+            outputStream.write(msg.getBytes());
+        }
     }
 
     private void handleCreate(String[] tokens) throws IOException {
@@ -95,7 +176,7 @@ public class ServerWorker extends Thread {
 
                 File usersFile = new File("ServerModule/Logs/users.txt");
                 File passwordsFile = new File("ServerModule/Logs/passwords.txt");
-                if(usersFile.exists() && passwordsFile.exists() && !usersFile.isDirectory()) {
+                if (usersFile.exists() && passwordsFile.exists() && !usersFile.isDirectory()) {
                     //System.out.println("notnotnot");
                     try(FileWriter fw = new FileWriter("ServerModule/Logs/users.txt", true);
                         BufferedWriter bw = new BufferedWriter(fw);
@@ -127,17 +208,6 @@ public class ServerWorker extends Thread {
                     }
                 }
 
-
-
-
-
-                /*for (String s : users) {
-                    System.out.println(s);
-                }
-                for (String t : passwords) {
-                    System.out.println(t);
-                }*/
-
                 String msg = "Successful registration\r\n";
                 outputStream.write(msg.getBytes());
             } else {
@@ -147,8 +217,7 @@ public class ServerWorker extends Thread {
             }
 
 
-
-
+            System.out.println("does this get executed??");
             String msg = "User added to database: " + user + "\r\n";
             outputStream.write(msg.getBytes());
         }
@@ -168,14 +237,12 @@ public class ServerWorker extends Thread {
     }
 
     private void handleJoin(String[] tokens) throws IOException {
-
         if (tokens.length > 1) {
             String topic = tokens[1];
             String msg = "Joined chatroom: " + topic + "\r\n";
             outputStream.write(msg.getBytes());
             topicSet.add(topic);
         }
-
     }
 
     private void handleOthersJoin(String[] tokens) {
@@ -208,6 +275,7 @@ public class ServerWorker extends Thread {
 
     // Format: "Message" "login" body...
     // Format: "Message" "#topic" body...
+
     private void handleMessage(String[] tokens) throws IOException {
 
         String sendTo = tokens[1];
@@ -216,6 +284,11 @@ public class ServerWorker extends Thread {
         boolean isTopic = sendTo.charAt(0) == '#';
 
         List<ServerWorker> workerList = server.getWorkerList();
+
+        /*for (ServerWorker worker : workerList) {
+            System.out.println(worker);
+        }*/
+
         for (ServerWorker worker: workerList) {
 
             if (isTopic) {
@@ -366,5 +439,7 @@ public class ServerWorker extends Thread {
 
 
     }
+
+
 
 }

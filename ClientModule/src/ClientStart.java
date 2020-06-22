@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class ClientStart extends JFrame {
@@ -44,6 +46,15 @@ public class ClientStart extends JFrame {
             //socket.close();
             System.exit(0);
         });
+
+        loginButton.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    clickLogin();
+                }
+            }
+        });
+
 
         getContentPane().add(jPanel, BorderLayout.CENTER);
         setSize(410,200);

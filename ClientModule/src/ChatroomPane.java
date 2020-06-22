@@ -16,7 +16,7 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener {
         this.login = login;
 
         client.addChatroomMessageListener(this);
-        client.join(login);
+        //client.join(login);
 
         setLayout(new BorderLayout());
         add(new JScrollPane(messageList), BorderLayout.CENTER);

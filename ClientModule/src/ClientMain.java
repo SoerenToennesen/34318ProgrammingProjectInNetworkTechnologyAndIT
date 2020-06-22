@@ -96,17 +96,17 @@ public class ClientMain {
 
 
     public void join(String chatroomName) throws IOException {
-        String cmd = "join " + chatroomName;
+        String cmd = "join " + chatroomName + "\r\n";
         serverOut.write(cmd.getBytes());
     }
 
     public void restJoin(String chatroomName) throws IOException {
-        String cmd = "othersjoin " + chatroomName;
+        String cmd = "othersjoin " + chatroomName + "\r\n";
         serverOut.write(cmd.getBytes());
     }
 
     public void leave(String chatroomName) throws IOException {
-        String cmd = "leave " + chatroomName;
+        String cmd = "leave " + chatroomName + "\r\n";
         serverOut.write(cmd.getBytes());
     }
 
@@ -115,11 +115,34 @@ public class ClientMain {
         String cmd = "create " + user + " " + password + "\r\n";
         serverOut.write(cmd.getBytes());
         String response = bufferedIn.readLine();
+        System.out.println("line over 3");
         System.out.println("Response line: " + response);
+        System.out.println("line under 3");
 
         if ("Successful registration".equalsIgnoreCase(response)) {
             return true;
         } else {
+            return false;
+        }
+    }
+
+    public boolean chatroomCreate(String chatroomName) throws IOException {
+
+        String cmd = "chatroomCreate " + chatroomName + "\r\n";
+        serverOut.write(cmd.getBytes());
+
+        String response = bufferedIn.readLine();
+        System.out.println("line over 2");
+        System.out.println("Response line from chatroomCreate method: " + response);
+        System.out.println("line under 2");
+
+        if ("Successful chatroom creation".equalsIgnoreCase(response)) {
+            //startMessageReader();
+            return true;
+        } /*else if (("Chatroom added to database: " + chatroomName).equalsIgnoreCase(response)) {
+            //startMessageReader();
+            return true;
+        }*/ else {
             return false;
         }
     }
@@ -159,6 +182,11 @@ public class ClientMain {
         try {
             String line;
             while ((line = bufferedIn.readLine()) != null) {
+
+                System.out.println("line over");
+                System.out.println("Response line from readMessageLoop: " + line);
+                System.out.println("line under");
+
                 String[] tokens = StringUtils.split(line);
                 if (tokens != null && tokens.length > 0) {
                     String cmd = tokens[0];
@@ -179,7 +207,14 @@ public class ClientMain {
 
 
 
+                    } else if ("joined".equalsIgnoreCase(cmd)) {
+                        System.out.println("executing joined");
+                        handleJoined(tokens);
+                    } else if ("successful".equalsIgnoreCase(cmd)) {
+                        System.out.println("executing successful");
+                        handleJoined(tokens);
                     }
+
                 }
             }
         } catch (Exception e) {
@@ -190,6 +225,18 @@ public class ClientMain {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private void handleJoined(String[] tokens) {
+
+
+
+        String chatroomName = tokens[2];
+        for (ChatroomStatusListener listener : chatroomStatusListeners) {
+            listener.online(chatroomName);
+        }
+        String[] sendChatroomsOnline = {"Online", chatroomName};
+        handleOnline(sendChatroomsOnline);
     }
 
     private void handleMessage(String[] tokensMsg) {
