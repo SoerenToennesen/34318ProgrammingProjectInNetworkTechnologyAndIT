@@ -186,13 +186,19 @@ public class ClientMain {
                     } else if ("offline".equalsIgnoreCase(cmd)) {
                         handleOffline(tokens);
                     } else if ("message".equalsIgnoreCase(cmd)) {
-                        if (tokens[4].charAt(0) == '#') {
-                            String[] tokensMsg = StringUtils.split(line, null, 6);
-                            handleMessage(tokensMsg);
+                        if (tokens.length > 4) {
+                            if (tokens[4].charAt(0) == '#') {
+                                String[] tokensMsg = StringUtils.split(line, null, 6);
+                                handleMessage(tokensMsg);
+                            } else {
+                                String[] tokensMsg = StringUtils.split(line, null, 4);
+                                handleMessage(tokensMsg);
+                            }
                         } else {
                             String[] tokensMsg = StringUtils.split(line, null, 4);
                             handleMessage(tokensMsg);
                         }
+
 
 
 
@@ -233,12 +239,20 @@ public class ClientMain {
     }
 
     private void handleMessage(String[] tokensMsg) {
-        if (tokensMsg[4].charAt(0) == '#') {
-            String login = tokensMsg[2];
-            String sendTo = tokensMsg[4];
-            String messageBody = tokensMsg[5];
-            for (ChatroomMessageListener listener : chatroomMessageListeners) {
-                listener.onChatroomMessage(login, messageBody);
+        if (tokensMsg.length > 4) {
+            if (tokensMsg[4].charAt(0) == '#') {
+                String login = tokensMsg[2];
+                String sendTo = tokensMsg[4];
+                String messageBody = tokensMsg[5];
+                for (ChatroomMessageListener listener : chatroomMessageListeners) {
+                    listener.onChatroomMessage(login, messageBody);
+                }
+            } else {
+                String login = tokensMsg[2];
+                String messageBody = tokensMsg[3];
+                for (MessageListener listener : messageListeners) {
+                    listener.onMessage(login, messageBody);
+                }
             }
         } else {
             String login = tokensMsg[2];
@@ -247,6 +261,8 @@ public class ClientMain {
                 listener.onMessage(login, messageBody);
             }
         }
+
+
 
     }
 
