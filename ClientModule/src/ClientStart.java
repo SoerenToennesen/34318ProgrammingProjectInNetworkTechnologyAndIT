@@ -68,44 +68,33 @@ public class ClientStart extends JFrame {
     private void clickLogin() {
 
 
-        try {
+        setVisible(false);
 
-            setVisible(false);
+        LoginPane loginPane = new LoginPane();
+        JFrame frame = new JFrame("Login");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(loginPane, BorderLayout.CENTER);
+        frame.setSize(300,200);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
 
-            LoginPane loginPane = new LoginPane();
-            JFrame frame = new JFrame("Login");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(loginPane, BorderLayout.CENTER);
-            frame.setSize(300,200);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
     private void clickCreateNewUser() {
 
 
-        try {
+        setVisible(false);
 
-            setVisible(false);
-
-            CreateNewUserPane createNewUserPane = new CreateNewUserPane();
-            JFrame frame = new JFrame("Create new user");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(createNewUserPane, BorderLayout.CENTER);
-            frame.setSize(300,200);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+        CreateNewUserPane createNewUserPane = new CreateNewUserPane();
+        JFrame frame = new JFrame("Create new user");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(createNewUserPane, BorderLayout.CENTER);
+        frame.setSize(300,200);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void main(String[] args) {
