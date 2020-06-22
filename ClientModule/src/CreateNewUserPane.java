@@ -22,13 +22,17 @@ public class CreateNewUserPane extends JPanel {
         add(passwordField);
         add(createButton);
         add(backButton);
-        
+
+        loginField.setToolTipText("Enter your desired username.");
         loginField.setPreferredSize(new Dimension(200,40));
-        
+
+        passwordField.setToolTipText("Enter your desired password. DO NOT forget it!");
         passwordField.setPreferredSize(new Dimension(200,40));
-        
+
+        createButton.setToolTipText("Create your profile.");
         createButton.setPreferredSize(new Dimension(200,30));
-        
+
+        backButton.setToolTipText("Go back to the Start Menu.");
         backButton.setPreferredSize(new Dimension(200, 20));
         backButton.setBackground(Color.BLACK);
         backButton.setForeground(Color.WHITE);

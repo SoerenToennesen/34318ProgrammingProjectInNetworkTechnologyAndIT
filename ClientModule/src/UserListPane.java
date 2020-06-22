@@ -44,12 +44,17 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         pane2.add(new JScrollPane(chatroomListUI));
         pane2.add(chatroomName);
 
+        chatroomName.setToolTipText("Insert the name of the chatroom you want to create.");
         chatroomName.setPreferredSize(new Dimension(200,30));
         chatroomListUI.setPreferredSize(new Dimension(200,5000));
         userListUI.setPreferredSize(new Dimension(200,5000));
         
         pane2.add(chatroomButton);
         pane1.add(logoutButton);
+
+        chatroomButton.setToolTipText("Create a chatroom.");
+
+        logoutButton.setToolTipText("Logout.");
         logoutButton.setBackground(Color.BLACK);
         logoutButton.setForeground(Color.WHITE);
 

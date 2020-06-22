@@ -23,13 +23,17 @@ public class LoginPane extends JPanel {
         add(passwordField);
         add(loginButton);
         add(backButton);
-        
+
+        loginField.setToolTipText("Enter your username.");
         loginField.setPreferredSize(new Dimension(200,40));
-        
+
+        passwordField.setToolTipText("Enter your password.");
         passwordField.setPreferredSize(new Dimension(200,40));
-        
+
+        loginButton.setToolTipText("Login.");
         loginButton.setPreferredSize(new Dimension(200,30));
-        
+
+        backButton.setToolTipText("Go back to the Start Menu.");
         backButton.setPreferredSize(new Dimension(200, 20));
         backButton.setBackground(Color.BLACK);
         backButton.setForeground(Color.WHITE);
