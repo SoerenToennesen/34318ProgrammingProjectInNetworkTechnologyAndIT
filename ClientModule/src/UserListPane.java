@@ -11,7 +11,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
     private final ClientMain client;
 
-    private JPanel pane1, pane2, pane3;
+    private JPanel pane1, pane2;
 
     private DefaultListModel<String> userListModel = new DefaultListModel<>();
     private JList<String> userListUI = new JList<>(userListModel);
