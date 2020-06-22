@@ -86,7 +86,7 @@ public class LoginPane extends JPanel {
                 UserListPane userListPane = new UserListPane(client);
                 JFrame frame = new JFrame("User List");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(600,280);
+                frame.setSize(600,290);
 
                 frame.getContentPane().add(userListPane, BorderLayout.CENTER);
                 frame.setLocationRelativeTo(null);
