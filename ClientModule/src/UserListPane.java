@@ -27,7 +27,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
     private JButton logoutButton = new JButton("Logout");
 
 
-    public UserListPane(ClientMain client) throws IOException {
+    public UserListPane(ClientMain client) {
         this.client = client;
         this.client.addUserStatusListener(this);
         this.client.addChatroomStatusListener(this);
@@ -69,11 +69,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
 
         chatroomButton.addActionListener(e -> {
-            try {
-                doCreateChatroom();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            doCreateChatroom();
             /*try {
                 ArrayList<String> currentChatrooms = new ArrayList<>();
                 for (int i = 0; i < chatroomListModel.getSize(); i++) {
@@ -97,16 +93,12 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         logoutButton.addActionListener(e -> {
             try {
                 client.logoff();
-                /*for (int i = 0; i < chatroomListModel.getSize(); i++) {
-                    client.leave(chatroomListModel.get(i));
-                }
-                 */
+
+                //dispose();
+                //new ClientStart();
 
 
                 setVisibleParentFrame();
-                //dispose();
-
-                //client.logoff();
                 LoginPane loginPane = new LoginPane();
                 JFrame frame = new JFrame("Login");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -148,17 +140,14 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
 
 
-                    String login = chatroomListUI.getSelectedValue();
-                    ChatroomPane chatroomPane = null;
-                    try {
-                        //client.join("#" + login);
+                    String chatroom = chatroomListUI.getSelectedValue();
+                    //String login = userListUI.getSelectedValue();
+                    ChatroomPane chatroomPane;
+                    //client.join("#" + login);
 
-                        chatroomPane = new ChatroomPane(client, login);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    chatroomPane = new ChatroomPane(client, chatroom);
 
-                    JFrame frame2 = new JFrame("Message: " + login);
+                    JFrame frame2 = new JFrame("Message: " + chatroom);
 
                     frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame2.setSize(500,500);
@@ -174,11 +163,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode()==KeyEvent.VK_ENTER){
-                    try {
-                        doCreateChatroom();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    doCreateChatroom();
                     /*
                     try {
                         ArrayList<String> currentChatrooms = new ArrayList<>();
@@ -207,17 +192,14 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode()==KeyEvent.VK_ENTER && chatroomListUI.getSelectedValue() != null){
-                    String login = chatroomListUI.getSelectedValue();
-                    ChatroomPane chatroomPane = null;
-                    try {
-                        //client.join("#" + login);
+                    String chatroom = chatroomListUI.getSelectedValue();
+                    //String login = userListUI.getSelectedValue();
+                    ChatroomPane chatroomPane;
+                    //client.join("#" + login);
 
-                        chatroomPane = new ChatroomPane(client, login);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    chatroomPane = new ChatroomPane(client, chatroom);
 
-                    JFrame frame2 = new JFrame("Message: " + login);
+                    JFrame frame2 = new JFrame("Message: " + chatroom);
 
                     frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame2.setSize(500,500);
@@ -261,7 +243,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
     }
 
-    public void doCreateChatroom() throws IOException {
+    public void doCreateChatroom() {
 
         String name = chatroomName.getText();
 
@@ -275,9 +257,12 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
             } else if (currentChatrooms.contains(name)) {
                 JOptionPane.showMessageDialog(UserListPane.this, "Chatroom already exists");
                 chatroomName.setText("");
+            } else if (name.contains(" ")) {
+                JOptionPane.showMessageDialog(UserListPane.this, "Chatroom can't contain spaces");
+                chatroomName.setText("");
             } else if (client.chatroomCreate("#" + name)) {
 
-                online("#" + name);
+                //online("#" + name);
                 chatroomName.setText("");
 
                 /*
@@ -321,7 +306,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         parent.dispose();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         ClientMain client = new ClientMain("localhost", 1234);
 
         UserListPane userListPane = new UserListPane(client);

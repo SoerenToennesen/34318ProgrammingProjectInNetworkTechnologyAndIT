@@ -3,6 +3,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ClientMain {
     private final String serverName;
@@ -17,6 +18,18 @@ public class ClientMain {
     private ArrayList<ChatroomStatusListener> chatroomStatusListeners = new ArrayList<>();
     private ArrayList<ChatroomMessageListener> chatroomMessageListeners = new ArrayList<>();
     private ArrayList<MessageListener> messageListeners = new ArrayList<>();
+
+    private HashSet<String> topicSet = new HashSet<>();
+
+
+    private String myName;
+    public String getMyName() {
+        return myName;
+    }
+    public void setMyName(String myName) {
+        this.myName = myName;
+    }
+
 
     public ClientMain(String serverName, int serverPort) {
         this.serverName = serverName;
@@ -50,20 +63,14 @@ public class ClientMain {
         });
 
         //call-back when another user sends a message to this user
-        client.addMessageListener(new MessageListener() {
-            @Override
-            public void onMessage(String fromLogin, String messageBody) {
-                //System.out.println(fromLogin);
-                System.out.println("Message from " + fromLogin + " " + messageBody);
-            }
+        client.addMessageListener((fromLogin, messageBody) -> {
+            //System.out.println(fromLogin);
+            System.out.println("Message from " + fromLogin + " " + messageBody);
         });
 
-        client.addChatroomMessageListener(new ChatroomMessageListener() {
-            @Override
-            public void onChatroomMessage(String fromLogin, String messageBody) {
-                //System.out.println(fromLogin);
-                System.out.println("Message from " + fromLogin + " " + messageBody);
-            }
+        client.addChatroomMessageListener((fromLogin, messageBody) -> {
+            //System.out.println(fromLogin);
+            System.out.println("Message from " + fromLogin + " " + messageBody);
         });
 
 
@@ -119,11 +126,7 @@ public class ClientMain {
         System.out.println("Response line: " + response);
         System.out.println("line under 3");
 
-        if ("Successful registration".equalsIgnoreCase(response)) {
-            return true;
-        } else {
-            return false;
-        }
+        return "Successful registration".equalsIgnoreCase(response);
     }
 
     public boolean chatroomCreate(String chatroomName) throws IOException {
@@ -136,15 +139,8 @@ public class ClientMain {
         System.out.println("Response line from chatroomCreate method: " + response);
         System.out.println("line under 2");
 
-        if ("Successful chatroom creation".equalsIgnoreCase(response)) {
-            //startMessageReader();
-            return true;
-        } /*else if (("Chatroom added to database: " + chatroomName).equalsIgnoreCase(response)) {
-            //startMessageReader();
-            return true;
-        }*/ else {
-            return false;
-        }
+        //startMessageReader();
+        return "Successful chatroom creation".equalsIgnoreCase(response);
     }
 
 
@@ -169,12 +165,7 @@ public class ClientMain {
     }
 
     private void startMessageReader() {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                readMessageLoop();
-            }
-        };
+        Thread t = new Thread(this::readMessageLoop);
         t.start();
     }
 
@@ -195,9 +186,7 @@ public class ClientMain {
                     } else if ("offline".equalsIgnoreCase(cmd)) {
                         handleOffline(tokens);
                     } else if ("message".equalsIgnoreCase(cmd)) {
-
-                        String check = tokens[3];
-                        if (check.equals("to")) {
+                        if (tokens[4].charAt(0) == '#') {
                             String[] tokensMsg = StringUtils.split(line, null, 6);
                             handleMessage(tokensMsg);
                         } else {
@@ -207,12 +196,16 @@ public class ClientMain {
 
 
 
-                    } else if ("joined".equalsIgnoreCase(cmd)) {
+                    } else if ("jointherest".equalsIgnoreCase(cmd)) {
                         System.out.println("executing joined");
                         handleJoined(tokens);
                     } else if ("successful".equalsIgnoreCase(cmd)) {
                         System.out.println("executing successful");
                         handleJoined(tokens);
+                    } else if ("joined".equalsIgnoreCase(cmd)) {
+                        handleOnline(tokens);
+                    } else if ("addtocollection".equalsIgnoreCase(cmd)) {
+                        handleOnline(tokens);
                     }
 
                 }
@@ -240,13 +233,12 @@ public class ClientMain {
     }
 
     private void handleMessage(String[] tokensMsg) {
-        String check = tokensMsg[3];
-        if (check.equals("to")) {
-            //String login = tokensMsg[2];
+        if (tokensMsg[4].charAt(0) == '#') {
+            String login = tokensMsg[2];
             String sendTo = tokensMsg[4];
             String messageBody = tokensMsg[5];
-            for (MessageListener listener : messageListeners) {
-                listener.onMessage(sendTo, messageBody);
+            for (ChatroomMessageListener listener : chatroomMessageListeners) {
+                listener.onChatroomMessage(login, messageBody);
             }
         } else {
             String login = tokensMsg[2];
@@ -270,6 +262,9 @@ public class ClientMain {
         if (login.substring(0,1).equals("#")) {
             for (ChatroomStatusListener listener : chatroomStatusListeners) {
                 listener.online(login);
+                //System.out.println("-----+------");
+                //System.out.println(login);
+                //System.out.println("+----------+");
             }
         } else {
             for (UserStatusListener listener : userStatusListeners) {
@@ -279,7 +274,7 @@ public class ClientMain {
 
     }
 
-    public boolean connect() throws IOException {
+    public boolean connect() {
         try {
             this.socket = new Socket(serverName, serverPort);
             System.out.println("Client port is " + socket.getLocalPort());

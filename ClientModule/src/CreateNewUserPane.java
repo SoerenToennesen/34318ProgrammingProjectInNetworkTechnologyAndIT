@@ -13,7 +13,7 @@ public class CreateNewUserPane extends JPanel {
     JButton createButton = new JButton("Create user");
     JButton backButton = new JButton("Back");
 
-    CreateNewUserPane() throws IOException {
+    CreateNewUserPane() {
         this.client = new ClientMain("localhost", 1234);
         client.connect();
         
@@ -74,6 +74,10 @@ public class CreateNewUserPane extends JPanel {
                 loginField.setText("");
                 passwordField.setText("");
                 JOptionPane.showMessageDialog(this, "Please fill in all fields");
+            } else if (login.contains(" ") || password.contains(" ")) {
+                loginField.setText("");
+                passwordField.setText("");
+                JOptionPane.showMessageDialog(this, "Username/password can't contain spaces");
             } else if (client.create(login, password)) {
                 setVisibleParentFrame();
                 ClientStart clientStart = new ClientStart();
@@ -99,7 +103,7 @@ public class CreateNewUserPane extends JPanel {
         parent.setVisible(false);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         /*CreateNewUserPane createNewUserPane = new CreateNewUserPane();
         createNewUserPane.setVisible(true);*/
 

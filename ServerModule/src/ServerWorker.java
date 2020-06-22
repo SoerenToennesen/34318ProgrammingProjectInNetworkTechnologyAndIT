@@ -113,8 +113,10 @@ public class ServerWorker extends Thread {
                 // I HAVE NO IDEA WHY, BUT WE NEED TO GIVE THE SERVER A "DUMMY"-MESSAGE
                 // IN ORDER FOR IT TO READ IN THE CORRECT ORDER.
                 // THIS IS INVOKED FROM THE READMESSAGE LOOP
-                String msg3 = "filler stuff yo\r\n";
+                String msg3 = "Joined " + name + "\r\n";
                 outputStream.write(msg3.getBytes());
+
+                topicSet.add(name);
 
                 // THIS IS INVOKED FROM THE CREATECHATROOM METHOD
                 String msg = "Successful chatroom creation\r\n";
@@ -168,6 +170,22 @@ public class ServerWorker extends Thread {
                 e.printStackTrace();
             }
 
+            ArrayList<String> passwordsBuffer = new ArrayList<>();
+            try {
+                File file = new File("ServerModule/Logs/passwords.txt");
+                FileReader fr = new FileReader(file);
+                BufferedReader br = new BufferedReader(fr);
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    //System.out.println(line);
+                    passwordsBuffer.add(line);
+                }
+                fr.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+
 
 
             if (!usersBuffer.contains(user)) {
@@ -191,7 +209,7 @@ public class ServerWorker extends Thread {
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter out = new PrintWriter(bw))
                     {
-                        out.println(user);
+                        out.println(password);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -332,6 +350,7 @@ public class ServerWorker extends Thread {
             boolean b = true;
             ArrayList<String> usersBuffer = new ArrayList<>();
             ArrayList<String> passwordsBuffer = new ArrayList<>();
+            ArrayList<String> chatroomsBuffer = new ArrayList<>();
 
 
             try {
@@ -357,6 +376,21 @@ public class ServerWorker extends Thread {
                 String line;
                 while ((line = br.readLine()) != null) {
                     passwordsBuffer.add(line);
+                }
+                fr.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                File file = new File("ServerModule/Logs/chatrooms.txt");
+                FileReader fr = new FileReader(file);
+                BufferedReader br = new BufferedReader(fr);
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    //System.out.println(line);
+                    chatroomsBuffer.add(line);
                 }
                 fr.close();
             } catch(IOException e) {
@@ -397,6 +431,25 @@ public class ServerWorker extends Thread {
                             worker.send(onlineMsg);
                         }
                     }
+
+                    /*int j = 0;
+                    for (ServerWorker worker: workerList) {
+                        //System.out.println(j);
+                        worker.topicSet.addAll(chatroomsBuffer);
+                        j++;
+                    }*/
+                    for (ServerWorker worker: workerList) {
+                        if (login.equals(worker.getLogin())) {
+                            for (String s : chatroomsBuffer) {
+                                worker.topicSet.add(s);
+                                String msg4 = "AddToCollection " + s + "\r\n";
+                                outputStream.write(msg4.getBytes());
+                            }
+                        }
+
+                    }
+
+
 
                 } /*else {
                     String msg = "Unsuccessful login\r\n";

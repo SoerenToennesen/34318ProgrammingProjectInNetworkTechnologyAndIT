@@ -12,7 +12,7 @@ public class LoginPane extends JPanel {
     JButton loginButton = new JButton("Login");
     JButton backButton = new JButton("Back");
 
-    public LoginPane() throws IOException {
+    public LoginPane() {
         
         this.client = new ClientMain("localhost", 1234);
         client.connect(); 
@@ -82,7 +82,7 @@ public class LoginPane extends JPanel {
             if (login.equals("") || password.equals("")) {
                 JOptionPane.showMessageDialog(this, "Please enter a username/password");
             } else if (client.login(login, password)) {
-
+                client.setMyName(login);
                 UserListPane userListPane = new UserListPane(client);
                 JFrame frame = new JFrame("User List");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,9 +92,11 @@ public class LoginPane extends JPanel {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
 
-                setVisible(false);
+                setVisibleParentFrame();
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid login/password");
+                loginField.setText("");
+                passwordField.setText("");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,7 +109,7 @@ public class LoginPane extends JPanel {
         parent.setVisible(false);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
 
         LoginPane loginPane = new LoginPane();
