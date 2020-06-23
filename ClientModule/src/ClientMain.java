@@ -18,6 +18,8 @@ public class ClientMain {
     private ArrayList<ChatroomStatusListener> chatroomStatusListeners = new ArrayList<>();
     private ArrayList<ChatroomMessageListener> chatroomMessageListeners = new ArrayList<>();
     private ArrayList<MessageListener> messageListeners = new ArrayList<>();
+    private ArrayList<FileListener> fileListeners = new ArrayList<>();
+    private ArrayList<ChatroomFileListener> chatroomFileListeners = new ArrayList<>();
 
     private HashSet<String> topicSet = new HashSet<>();
 
@@ -35,7 +37,7 @@ public class ClientMain {
         this.serverName = serverName;
         this.serverPort = serverPort;
     }
-    public static void main(String[] args) throws IOException {
+    public void main(String[] args) throws IOException {
         ClientMain client = new ClientMain("localhost", 1234);
         //addUserStatusListener tells you the presence of a user when they go online/offline
         client.addUserStatusListener(new UserStatusListener() {
@@ -72,7 +74,12 @@ public class ClientMain {
             //System.out.println(fromLogin);
             System.out.println("Message from " + fromLogin + " " + messageBody);
         });
+        client.addFileListener((fileName) -> {
+            //System.out.println(fromLogin);
+            System.out.println("fileTo " + fileName);
+        });
 
+        //fileTransfer("x", "x", "x");
 
         //After you connect you can login, and after you login you can send messages
         if (!client.connect()) {
@@ -87,6 +94,36 @@ public class ClientMain {
             }
             //client.logoff();
         }
+    }
+
+    public void fileTransfer(String sendTo, String fileName, String location) throws IOException {
+        //location = "C:\\Users\\bruger\\Documents\\Java Applications\\34318ProgrammingProjectInNetworkTechnologyAndIT\\Files\\testFile.png";
+        StringBuilder fileType = new StringBuilder();
+        for (int i = location.length() - 1; i >= 0; i--) {
+            if (location.charAt(i) == '.') {
+                fileType.reverse();
+                break;
+            }
+            fileType.append(location.charAt(i));
+        }
+
+        FileInputStream fileInputStream = new FileInputStream(location);
+        int fileSize = (int) fileInputStream.getChannel().size();
+        byte[] bytes = new byte[fileSize];
+        fileInputStream.read(bytes, 0, bytes.length);
+        StringBuilder fileInStringFormat = new StringBuilder();
+        for (byte b : bytes) {
+            int x = (b < 0 ? b + 256 : b);
+            String hexadecimalRepresentation = Integer.toHexString(x);
+            if (hexadecimalRepresentation.length() < 2) {
+                hexadecimalRepresentation = "0" + hexadecimalRepresentation;
+            }
+            fileInStringFormat.append(hexadecimalRepresentation);
+        }
+
+        String cmd = "fileTransfer " + sendTo + " " + fileName + " " + fileType + " " + fileSize + " " + fileInStringFormat + "\r\n";
+        serverOut.write(cmd.getBytes());
+
     }
 
     public void message(String sendTo, String messageBody) throws IOException {
@@ -122,9 +159,9 @@ public class ClientMain {
         String cmd = "create " + user + " " + password + "\r\n";
         serverOut.write(cmd.getBytes());
         String response = bufferedIn.readLine();
-        System.out.println("line over 3");
+        //System.out.println("line over 3");
         System.out.println("Response line: " + response);
-        System.out.println("line under 3");
+        //System.out.println("line under 3");
 
         return "Successful registration".equalsIgnoreCase(response);
     }
@@ -135,9 +172,9 @@ public class ClientMain {
         serverOut.write(cmd.getBytes());
 
         String response = bufferedIn.readLine();
-        System.out.println("line over 2");
+        //System.out.println("line over 2");
         System.out.println("Response line from chatroomCreate method: " + response);
-        System.out.println("line under 2");
+        //System.out.println("line under 2");
 
         //startMessageReader();
         return "Successful chatroom creation".equalsIgnoreCase(response);
@@ -174,9 +211,9 @@ public class ClientMain {
             String line;
             while ((line = bufferedIn.readLine()) != null) {
 
-                System.out.println("line over");
+                //System.out.println("line over");
                 System.out.println("Response line from readMessageLoop: " + line);
-                System.out.println("line under");
+                //System.out.println("line under");
 
                 String[] tokens = StringUtils.split(line);
                 if (tokens != null && tokens.length > 0) {
@@ -212,6 +249,8 @@ public class ClientMain {
                         handleOnline(tokens);
                     } else if ("addtocollection".equalsIgnoreCase(cmd)) {
                         handleOnline(tokens);
+                    } else if ("fileto".equalsIgnoreCase(cmd)) {
+                        handleFileTransfer(tokens);
                     }
 
                 }
@@ -224,6 +263,28 @@ public class ClientMain {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private void handleFileTransfer(String[] tokens) {
+
+        String login = tokens[1];
+        String fileName = tokens[2];
+        String fileType = tokens[3];
+        String fileInStringFormat = tokens[4];
+        System.out.println(fileName);
+        if (login.charAt(0) == '#') {
+            System.out.println("hello im here now");
+            for (ChatroomFileListener listener : chatroomFileListeners) {
+                listener.onChatroomFile(fileName);
+            }
+        } else {
+            System.out.println("hello im here now2");
+            for (FileListener listener : fileListeners) {
+                listener.onFile(fileName);
+            }
+        }
+
+
     }
 
     private void handleJoined(String[] tokens) {
@@ -308,7 +369,12 @@ public class ClientMain {
 
 
 
-
+    public void addFileListener(FileListener listener) {
+        fileListeners.add(listener);
+    }
+    public void addChatroomFileListener(ChatroomFileListener listener) {
+        chatroomFileListeners.add(listener);
+    }
 
     public void addUserStatusListener(UserStatusListener listener) {
         userStatusListeners.add(listener);

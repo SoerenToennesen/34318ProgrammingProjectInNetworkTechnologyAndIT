@@ -1,4 +1,5 @@
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -57,15 +58,59 @@ public class ServerWorker extends Thread {
                     handleOthersJoin(tokens);
                 } */else if ("chatroomCreate".equalsIgnoreCase(cmd)) {
                     handleChatroomCreate(tokens);
+                } else if ("fileTransfer".equalsIgnoreCase(cmd)) {
+                    String[] tokensMsg = StringUtils.split(line, null, 6);
+                    handleFileTransfer(tokensMsg);
                 }
                 else {
-                    String msg = "Unknown command: " + cmd + "\r\n";
-                    outputStream.write(msg.getBytes());
+
+
+                    //String msg = "Unknown command: " + cmd + "\r\n";
+                    //outputStream.write(msg.getBytes());
                 }
             }
         }
 
         clientSocket.close();
+    }
+
+    private void handleFileTransfer(String[] tokens) throws IOException {
+
+        String sendTo = tokens[1];
+        String fileName = tokens[2];
+        String fileType = tokens[3];
+        int fileSize = Integer.parseInt(tokens[4]);
+        String fileInStringFormat = tokens[5];
+
+
+        byte[] fileBytes = new byte[fileSize];
+        for (int i = 0; i < fileSize; i++) {
+            int x = Integer.parseInt(fileInStringFormat.substring(2 * i, 2 * (i + 1)), 16);
+            fileBytes[i] = (byte) (x > 127 ? x - 256 : x);
+        }
+
+        FileUtils.writeByteArrayToFile(new File("ServerModule/Files/" + fileName), fileBytes);
+        System.out.println("im here now3");
+        System.out.println(sendTo);
+        boolean isTopic = sendTo.charAt(0) == '#';
+        List<ServerWorker> workerList = server.getWorkerList();
+        for (ServerWorker worker: workerList) {
+            if (isTopic) {
+                System.out.println("im here now4");
+                if (worker.isMemberOfTopic(sendTo)) {
+                    String outMsg = "fileTo " + sendTo + " " + fileName + " " + fileType + " " + fileInStringFormat + "\r\n";
+                    worker.send(outMsg);
+                }
+            } else {
+                System.out.println("im here now5");
+                if (sendTo.equalsIgnoreCase(worker.getLogin())) {
+                    String outMsg = "fileTo " + sendTo + " " + fileName + " " + fileType + " " + fileInStringFormat + "\r\n";
+                    worker.send(outMsg);
+                }
+            }
+
+        }
+
     }
 
     private void handleChatroomCreate(String[] tokens) throws IOException {

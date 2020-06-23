@@ -77,6 +77,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
 
         chatroomButton.addActionListener(e -> {
+
             doCreateChatroom();
             /*try {
                 ArrayList<String> currentChatrooms = new ArrayList<>();
