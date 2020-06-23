@@ -43,6 +43,11 @@ public class CreateNewUserPane extends JPanel {
         backButton.addActionListener(e -> {
             //dispose();
             setVisibleParentFrame();
+            try {
+                doSocketClose();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             ClientStart clientStart = new ClientStart();
             clientStart.setVisible(true);
         });        
@@ -121,4 +126,8 @@ public class CreateNewUserPane extends JPanel {
 
     }
 
+    public void doSocketClose() throws IOException {
+        client.logoff();
+        //client.close();
+    }
 }

@@ -2,7 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+
+import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class LoginPane extends JPanel {
 
@@ -45,6 +49,11 @@ public class LoginPane extends JPanel {
 
             //dispose();
             setVisibleParentFrame();
+            try {
+                doSocketClose();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
 
 
             ClientStart clientStart = new ClientStart();
@@ -77,6 +86,11 @@ public class LoginPane extends JPanel {
 
     }
 
+    public void doSocketClose() throws IOException {
+        client.logoff();
+        //client.close();
+    }
+
     private void doLogin() {
         String login = loginField.getText();
         String password = String.valueOf(passwordField.getPassword());
@@ -96,7 +110,23 @@ public class LoginPane extends JPanel {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
 
+                frame.addWindowListener(new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        System.out.println("check here");
+                        try {
+                            client.logoff();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        //client.close();
+                        System.exit(0);
+                    }
+                });
+
+
+
                 setVisibleParentFrame();
+
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid login/password");
                 loginField.setText("");

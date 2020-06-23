@@ -61,12 +61,14 @@ public class ServerWorker extends Thread {
                 } else if ("fileTransfer".equalsIgnoreCase(cmd)) {
                     String[] tokensMsg = StringUtils.split(line, null, 6);
                     handleFileTransfer(tokensMsg);
+                } else if ("socketclose".equalsIgnoreCase(cmd)) {
+                    handleSocketClose();
                 }
                 else {
 
 
-                    //String msg = "Unknown command: " + cmd + "\r\n";
-                    //outputStream.write(msg.getBytes());
+                    String msg = "Unknown command: " + cmd + "\r\n";
+                    outputStream.write(msg.getBytes());
                 }
             }
         }
@@ -367,6 +369,9 @@ public class ServerWorker extends Thread {
             }
         }
 
+    }
+    private void handleSocketClose() throws IOException {
+        clientSocket.close();
     }
 
     private void handleLogoff() throws IOException {

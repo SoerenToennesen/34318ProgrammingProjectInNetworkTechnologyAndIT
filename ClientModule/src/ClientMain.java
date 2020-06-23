@@ -9,7 +9,7 @@ public class ClientMain {
     private final String serverName;
     private final int serverPort;
 
-    private Socket socket;
+    public Socket socket;
     private OutputStream serverOut;
     private InputStream serverIn;
     private BufferedReader bufferedIn;
@@ -364,6 +364,15 @@ public class ClientMain {
         }
         return false;
 
+    }
+    public void close() {
+        try {
+            String cmd = "socketclose this client\r\n";
+            serverOut.write(cmd.getBytes());
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -105,10 +105,13 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
                 //dispose();
                 //new ClientStart();
-
-
                 setVisibleParentFrame();
-                LoginPane loginPane = new LoginPane();
+
+                ClientStart clientStart = new ClientStart();
+                clientStart.setVisible(true);
+
+
+                /*LoginPane loginPane = new LoginPane();
                 JFrame frame = new JFrame("Login");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.getContentPane().add(loginPane, BorderLayout.CENTER);
@@ -116,6 +119,8 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
                 //frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
+
+                 */
 
 
                 } catch (IOException e2) {
@@ -327,6 +332,8 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         frame.getContentPane().add(userListPane);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+
 
         if (client.connect()) {
             try {

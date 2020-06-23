@@ -2,9 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class ClientStart extends JFrame {
+
+    //private final ClientMain client;
 
     JButton loginButton = new JButton("Login");
     JButton createNewUser = new JButton("Create new user");
@@ -16,7 +20,7 @@ public class ClientStart extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel jPanel = new JPanel();
-        jPanel.setBackground(Color.black); 
+        jPanel.setBackground(Color.black);
         jPanel.setLayout(new BorderLayout());
         jPanel.add(loginButton,BorderLayout.WEST);
         jPanel.add(createNewUser,BorderLayout.EAST);
@@ -43,7 +47,6 @@ public class ClientStart extends JFrame {
         createNewUser.addActionListener(e -> clickCreateNewUser());
 
         exit.addActionListener(e -> {
-            //socket.close();
             System.exit(0);
         });
 
@@ -63,6 +66,12 @@ public class ClientStart extends JFrame {
         setResizable(false);
         setVisible(true);
 
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+
     }
 
     private void clickLogin() {
@@ -77,6 +86,18 @@ public class ClientStart extends JFrame {
         frame.setSize(300,200);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.out.println("check here");
+                try {
+                    loginPane.doSocketClose();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                System.exit(0);
+            }
+        });
 
 
     }
@@ -93,6 +114,18 @@ public class ClientStart extends JFrame {
         frame.setSize(300,200);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.out.println("check here");
+                try {
+                    createNewUserPane.doSocketClose();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                System.exit(0);
+            }
+        });
 
 
     }
