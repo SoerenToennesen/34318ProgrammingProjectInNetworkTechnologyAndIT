@@ -63,23 +63,16 @@ public class ClientMain {
                 System.out.println("OFFLINE: " + login);
             }
         });
-
-        //call-back when another user sends a message to this user
         client.addMessageListener((fromLogin, messageBody) -> {
-            //System.out.println(fromLogin);
             System.out.println("Message from " + fromLogin + " " + messageBody);
         });
 
         client.addChatroomMessageListener((fromLogin, messageBody) -> {
-            //System.out.println(fromLogin);
             System.out.println("Message from " + fromLogin + " " + messageBody);
         });
         client.addFileListener((fileName) -> {
-            //System.out.println(fromLogin);
             System.out.println("fileTo " + fileName);
         });
-
-        //fileTransfer("x", "x", "x");
 
         //After you connect you can login, and after you login you can send messages
         if (!client.connect()) {
@@ -138,17 +131,6 @@ public class ClientMain {
 
     }
 
-
-    public void join(String chatroomName) throws IOException {
-        String cmd = "join " + chatroomName + "\r\n";
-        serverOut.write(cmd.getBytes());
-    }
-
-    public void restJoin(String chatroomName) throws IOException {
-        String cmd = "othersjoin " + chatroomName + "\r\n";
-        serverOut.write(cmd.getBytes());
-    }
-
     public void leave(String chatroomName) throws IOException {
         String cmd = "leave " + chatroomName + "\r\n";
         serverOut.write(cmd.getBytes());
@@ -159,9 +141,7 @@ public class ClientMain {
         String cmd = "create " + user + " " + password + "\r\n";
         serverOut.write(cmd.getBytes());
         String response = bufferedIn.readLine();
-        //System.out.println("line over 3");
         System.out.println("Response line: " + response);
-        //System.out.println("line under 3");
 
         return "Successful registration".equalsIgnoreCase(response);
     }
@@ -170,13 +150,8 @@ public class ClientMain {
 
         String cmd = "chatroomCreate " + chatroomName + "\r\n";
         serverOut.write(cmd.getBytes());
-
         String response = bufferedIn.readLine();
-        //System.out.println("line over 2");
         System.out.println("Response line from chatroomCreate method: " + response);
-        //System.out.println("line under 2");
-
-        //startMessageReader();
         return "Successful chatroom creation".equalsIgnoreCase(response);
     }
 
@@ -210,10 +185,7 @@ public class ClientMain {
         try {
             String line;
             while ((line = bufferedIn.readLine()) != null) {
-
-                //System.out.println("line over");
                 System.out.println("Response line from readMessageLoop: " + line);
-                //System.out.println("line under");
 
                 String[] tokens = StringUtils.split(line);
                 if (tokens != null && tokens.length > 0) {
@@ -235,16 +207,6 @@ public class ClientMain {
                             String[] tokensMsg = StringUtils.split(line, null, 4);
                             handleMessage(tokensMsg);
                         }
-
-
-
-
-                    } else if ("jointherest".equalsIgnoreCase(cmd)) {
-                        System.out.println("executing joined");
-                        handleJoined(tokens);
-                    } else if ("successful".equalsIgnoreCase(cmd)) {
-                        System.out.println("executing successful");
-                        handleJoined(tokens);
                     } else if ("joined".equalsIgnoreCase(cmd)) {
                         handleOnline(tokens);
                     } else if ("addtocollection".equalsIgnoreCase(cmd)) {
@@ -283,20 +245,6 @@ public class ClientMain {
                 listener.onFile(fileName);
             }
         }
-
-
-    }
-
-    private void handleJoined(String[] tokens) {
-
-
-
-        String chatroomName = tokens[2];
-        for (ChatroomStatusListener listener : chatroomStatusListeners) {
-            listener.online(chatroomName);
-        }
-        String[] sendChatroomsOnline = {"Online", chatroomName};
-        handleOnline(sendChatroomsOnline);
     }
 
     private void handleMessage(String[] tokensMsg) {
@@ -339,9 +287,6 @@ public class ClientMain {
         if (login.substring(0,1).equals("#")) {
             for (ChatroomStatusListener listener : chatroomStatusListeners) {
                 listener.online(login);
-                //System.out.println("-----+------");
-                //System.out.println(login);
-                //System.out.println("+----------+");
             }
         } else {
             for (UserStatusListener listener : userStatusListeners) {
@@ -365,17 +310,6 @@ public class ClientMain {
         return false;
 
     }
-    public void close() {
-        try {
-            String cmd = "socketclose this client\r\n";
-            serverOut.write(cmd.getBytes());
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 
 
     public void addFileListener(FileListener listener) {
@@ -408,13 +342,4 @@ public class ClientMain {
     public void removeMessageListener(MessageListener listener) {
         messageListeners.remove(listener);
     }
-
-
-    /*public String[] checkAllOnline() {
-
-
-
-    }
-
-     */
 }

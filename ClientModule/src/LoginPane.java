@@ -46,8 +46,6 @@ public class LoginPane extends JPanel {
         loginButton.addActionListener(e -> doLogin());
 
         backButton.addActionListener(e -> {
-
-            //dispose();
             setVisibleParentFrame();
             try {
                 doSocketClose();
@@ -78,23 +76,15 @@ public class LoginPane extends JPanel {
                 }
             }
         });
-
-
-        //checking commit
-
-
-
     }
 
     public void doSocketClose() throws IOException {
         client.logoff();
-        //client.close();
     }
 
     private void doLogin() {
         String login = loginField.getText();
         String password = String.valueOf(passwordField.getPassword());
-        //String password = passwordField.getText();
 
         try {
             if (login.equals("") || password.equals("")) {
@@ -118,7 +108,6 @@ public class LoginPane extends JPanel {
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
-                        //client.close();
                         System.exit(0);
                     }
                 });

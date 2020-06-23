@@ -76,7 +76,6 @@ public class CreateNewUserPane extends JPanel {
     private void doCreateUser() {
         String login = loginField.getText();
         String password = String.valueOf(passwordField.getPassword());
-        //String password = passwordField.getText();
 
         try {
             if (login.equals("") || password.equals("")) {
@@ -113,8 +112,6 @@ public class CreateNewUserPane extends JPanel {
     }
 
     public static void main(String[] args) {
-        /*CreateNewUserPane createNewUserPane = new CreateNewUserPane();
-        createNewUserPane.setVisible(true);*/
 
         CreateNewUserPane createNewUserPane = new CreateNewUserPane();
         JFrame frame = new JFrame("Register user");
@@ -128,6 +125,5 @@ public class CreateNewUserPane extends JPanel {
 
     public void doSocketClose() throws IOException {
         client.logoff();
-        //client.close();
     }
 }

@@ -54,15 +54,11 @@ public class ServerWorker extends Thread {
                     handleLeave(tokens);
                 } else if ("create".equalsIgnoreCase(cmd)) {
                     handleCreate(tokens);
-                } /*else if ("othersjoin".equalsIgnoreCase(cmd)) {
-                    handleOthersJoin(tokens);
-                } */else if ("chatroomCreate".equalsIgnoreCase(cmd)) {
+                } else if ("chatroomCreate".equalsIgnoreCase(cmd)) {
                     handleChatroomCreate(tokens);
                 } else if ("fileTransfer".equalsIgnoreCase(cmd)) {
                     String[] tokensMsg = StringUtils.split(line, null, 6);
                     handleFileTransfer(tokensMsg);
-                } else if ("socketclose".equalsIgnoreCase(cmd)) {
-                    handleSocketClose();
                 }
                 else {
 
@@ -136,8 +132,6 @@ public class ServerWorker extends Thread {
                 e.printStackTrace();
             }
 
-
-
             if (!chatroomsBuffer.contains(name)) {
 
                 File chatroomsFile = new File("ServerModule/Logs/chatrooms.txt");
@@ -174,23 +168,6 @@ public class ServerWorker extends Thread {
                 System.err.println("Chatroom creation failed for " + name);
             }
 
-            //String[] executeHandleJoin = {"join", name};
-
-            /*
-            List<ServerWorker> workerList = server.getWorkerList();
-            // Send current user all other online logins
-            for (ServerWorker worker: workerList) {
-                if (worker.getLogin() != null) {
-                    String msg2 = "Join " + worker.getLogin() + "\r\n";
-                    send(msg2);
-                }
-            }
-             */
-
-
-
-            //handleJoin(executeHandleJoin);
-
             String msg = "Chatroom added to database: " + name + "\r\n";
             outputStream.write(msg.getBytes());
         }
@@ -209,7 +186,6 @@ public class ServerWorker extends Thread {
 
                 String line;
                 while ((line = br.readLine()) != null) {
-                    //System.out.println(line);
                     usersBuffer.add(line);
                 }
                 fr.close();
@@ -236,8 +212,6 @@ public class ServerWorker extends Thread {
 
 
             if (!usersBuffer.contains(user)) {
-                //users.add(user);
-                //passwords.add(password);
 
                 File usersFile = new File("ServerModule/Logs/users.txt");
                 File passwordsFile = new File("ServerModule/Logs/passwords.txt");
@@ -310,37 +284,8 @@ public class ServerWorker extends Thread {
         }
     }
 
-    private void handleOthersJoin(String[] tokens) {
-        if (tokens.length > 1) {
-            String topic = tokens[1];
-            List<ServerWorker> workerList = server.getWorkerList();
-            /*
-            // Send current user all other online logins
-            for (ServerWorker worker: workerList) {
-                if (worker.getLogin() != null) {
-                    if (!login.equals(worker.getLogin())) {
-
-
-                        //handleJoin(new String[]{"join", topic});
-
-                        String msg = "Joined chatroom: " + topic + "\r\n";
-                        outputStream.write(msg.getBytes());
-                        topicSet.add(topic);
-
-
-                        String msg2 = "Online " + worker.getLogin() + "\r\n";
-                        send(msg2);
-                    }
-                }
-            }
-
-             */
-        }
-    }
-
     // Format: "Message" "login" body...
     // Format: "Message" "#topic" body...
-
     private void handleMessage(String[] tokens) throws IOException {
 
         String sendTo = tokens[1];
@@ -349,10 +294,6 @@ public class ServerWorker extends Thread {
         boolean isTopic = sendTo.charAt(0) == '#';
 
         List<ServerWorker> workerList = server.getWorkerList();
-
-        /*for (ServerWorker worker : workerList) {
-            System.out.println(worker);
-        }*/
 
         for (ServerWorker worker: workerList) {
 
@@ -369,9 +310,6 @@ public class ServerWorker extends Thread {
             }
         }
 
-    }
-    private void handleSocketClose() throws IOException {
-        clientSocket.close();
     }
 
     private void handleLogoff() throws IOException {
@@ -439,7 +377,6 @@ public class ServerWorker extends Thread {
 
                 String line;
                 while ((line = br.readLine()) != null) {
-                    //System.out.println(line);
                     chatroomsBuffer.add(line);
                 }
                 fr.close();
@@ -453,9 +390,7 @@ public class ServerWorker extends Thread {
 
 
             for (int i = 0; i < usersBuffer.size(); i++) {
-                if ((login.equals(usersBuffer.get(i)) && password.equals(passwordsBuffer.get(i)))
-                    /*|| (login.equals("guest") && password.equals("guest"))
-                        || (login.equals("jim") && password.equals("jim"))*/) {
+                if (login.equals(usersBuffer.get(i)) && password.equals(passwordsBuffer.get(i))) {
                     b = false;
                     String msg = "Login successful\r\n";
                     outputStream.write(msg.getBytes());
@@ -481,13 +416,6 @@ public class ServerWorker extends Thread {
                             worker.send(onlineMsg);
                         }
                     }
-
-                    /*int j = 0;
-                    for (ServerWorker worker: workerList) {
-                        //System.out.println(j);
-                        worker.topicSet.addAll(chatroomsBuffer);
-                        j++;
-                    }*/
                     for (ServerWorker worker: workerList) {
                         if (login.equals(worker.getLogin())) {
                             for (String s : chatroomsBuffer) {
@@ -498,39 +426,14 @@ public class ServerWorker extends Thread {
                         }
 
                     }
-
-
-
-                } /*else {
-                    String msg = "Unsuccessful login\r\n";
-                    outputStream.write(msg.getBytes());
-                    System.err.println("Login failed for " + login);
-                }*/
+                }
             }
             if (b) {
-
-                /*for (String s : users) {
-                    System.out.println(s);
-                }
-                for (String t : passwords) {
-                    System.out.println(t);
-                }*/
 
                 String msg = "Unsuccessful login\r\n";
                 outputStream.write(msg.getBytes());
                 System.err.println("Login failed for " + login);
             }
-
-
-
-
-
-
-
-
-
-
-
         }
     }
 
@@ -538,11 +441,5 @@ public class ServerWorker extends Thread {
         if (login != null) {
             outputStream.write(onlineMsg.getBytes());
         }
-
-
-
     }
-
-
-
 }
