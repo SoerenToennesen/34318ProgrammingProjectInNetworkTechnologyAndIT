@@ -81,7 +81,7 @@ public class ClientStart extends JFrame {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(loginPane, BorderLayout.CENTER);
-        frame.setSize(300,200);
+        frame.setSize(300,250);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
@@ -109,7 +109,7 @@ public class ClientStart extends JFrame {
         JFrame frame = new JFrame("Create new user");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(createNewUserPane, BorderLayout.CENTER);
-        frame.setSize(300,200);
+        frame.setSize(300,250);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 

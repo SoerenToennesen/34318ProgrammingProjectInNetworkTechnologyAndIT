@@ -8,10 +8,12 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 public class LoginPane extends JPanel {
 
     private final ClientMain client;
-    JTextField loginField = new JTextField();
-    JPasswordField passwordField = new JPasswordField();
-    JButton loginButton = new JButton("Login");
-    JButton backButton = new JButton("Back");
+    private JLabel loginLabel = new JLabel("Insert username:");
+    private JTextField loginField = new JTextField();
+    private JLabel passwordLabel = new JLabel("Insert password:");
+    private JPasswordField passwordField = new JPasswordField();
+    private JButton loginButton = new JButton("Login");
+    private JButton backButton = new JButton("Back");
 
     public LoginPane() {
         
@@ -20,13 +22,16 @@ public class LoginPane extends JPanel {
 
 
         setLayout(new FlowLayout());
+        add(loginLabel);
         add(loginField);
+        add(passwordLabel);
         add(passwordField);
         add(loginButton);
         add(backButton);
 
+        loginLabel.setPreferredSize(new Dimension(200,20));
         loginField.setPreferredSize(new Dimension(200,40));
-
+        passwordLabel.setPreferredSize(new Dimension(200,20));
         passwordField.setPreferredSize(new Dimension(200,40));
 
         loginButton.setToolTipText("Login.");

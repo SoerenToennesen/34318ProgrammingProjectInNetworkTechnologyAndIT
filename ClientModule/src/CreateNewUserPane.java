@@ -8,24 +8,29 @@ public class CreateNewUserPane extends JPanel {
 
     private final ClientMain client;
 
-    JTextField loginField = new JTextField();
-    JPasswordField passwordField = new JPasswordField();
-    JButton createButton = new JButton("Create user");
-    JButton backButton = new JButton("Back");
+    private JLabel loginLabel = new JLabel("Insert username:");
+    private JTextField loginField = new JTextField();
+    private JLabel passwordLabel = new JLabel("Insert password:");
+    private JPasswordField passwordField = new JPasswordField();
+    private JButton createButton = new JButton("Create user");
+    private JButton backButton = new JButton("Back");
 
     CreateNewUserPane() {
         this.client = new ClientMain("localhost", 1234);
         client.connect();
         
         setLayout(new FlowLayout());
+        add(loginLabel);
         add(loginField);
+        add(passwordLabel);
         add(passwordField);
         add(createButton);
         add(backButton);
 
+        loginLabel.setPreferredSize(new Dimension(200,20));
         loginField.setToolTipText("Enter your desired username.");
         loginField.setPreferredSize(new Dimension(200,40));
-
+        passwordLabel.setPreferredSize(new Dimension(200,20));
         passwordField.setToolTipText("Enter your desired password. DO NOT forget it!");
         passwordField.setPreferredSize(new Dimension(200,40));
 
@@ -116,7 +121,7 @@ public class CreateNewUserPane extends JPanel {
         CreateNewUserPane createNewUserPane = new CreateNewUserPane();
         JFrame frame = new JFrame("Register user");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300,200);
+        frame.setSize(300,300);
         frame.getContentPane().add(createNewUserPane, BorderLayout.CENTER);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
