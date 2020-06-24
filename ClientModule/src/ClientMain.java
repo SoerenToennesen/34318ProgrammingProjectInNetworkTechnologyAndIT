@@ -1,5 +1,6 @@
 import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class ClientMain {
         }
     }
 
-    public void fileTransfer(String sendTo, String fileName, String location) throws IOException {
+    public int fileTransfer(String sendTo, String fileName, String location) throws IOException {
         //location = "C:\\Users\\bruger\\Documents\\Java Applications\\34318ProgrammingProjectInNetworkTechnologyAndIT\\Files\\testFile.png";
         StringBuilder fileType = new StringBuilder();
         for (int i = location.length() - 1; i >= 0; i--) {
@@ -102,6 +103,10 @@ public class ClientMain {
 
         FileInputStream fileInputStream = new FileInputStream(location);
         int fileSize = (int) fileInputStream.getChannel().size();
+        if (fileSize > 25000000) {
+            return -1;
+        }
+
         byte[] bytes = new byte[fileSize];
         fileInputStream.read(bytes, 0, bytes.length);
         StringBuilder fileInStringFormat = new StringBuilder();
@@ -116,6 +121,8 @@ public class ClientMain {
 
         String cmd = "fileTransfer " + sendTo + " " + fileName + " " + fileType + " " + fileSize + " " + fileInStringFormat + "\r\n";
         serverOut.write(cmd.getBytes());
+
+        return 0;
 
     }
 
