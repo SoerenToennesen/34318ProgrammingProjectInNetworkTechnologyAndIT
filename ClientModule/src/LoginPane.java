@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.IOException;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
@@ -28,10 +25,8 @@ public class LoginPane extends JPanel {
         add(loginButton);
         add(backButton);
 
-        loginField.setToolTipText("Enter your username.");
         loginField.setPreferredSize(new Dimension(200,40));
 
-        passwordField.setToolTipText("Enter your password.");
         passwordField.setPreferredSize(new Dimension(200,40));
 
         loginButton.setToolTipText("Login.");
@@ -42,6 +37,20 @@ public class LoginPane extends JPanel {
         backButton.setBackground(Color.BLACK);
         backButton.setForeground(Color.WHITE);
 
+
+        loginField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loginField.setText("");
+            }
+        });
+
+        passwordField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                passwordField.setText("");
+            }
+        });
 
         loginButton.addActionListener(e -> doLogin());
 

@@ -61,6 +61,7 @@ public class MessagePane extends JPanel implements MessageListener, FileListener
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = -8;
         add(inputField, gbc);
+        inputField.setText("Type a message...");
 //        inputField.setPreferredSize(new Dimension(200,40));
 
 
@@ -90,6 +91,15 @@ public class MessagePane extends JPanel implements MessageListener, FileListener
         filesListModel.addElement("testFile3.gif");
         filesListModel.addElement("testFile4.txt");
         filesListModel.addElement("testFile5.jpeg");
+
+
+
+        inputField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                inputField.setText("");
+            }
+        });
 
         inputField.addActionListener(e -> {
             try {

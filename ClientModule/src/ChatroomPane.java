@@ -65,6 +65,7 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener, Cha
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = -8;
         add(inputField, gbc);
+        inputField.setText("Type a message...");
 //        inputField.setPreferredSize(new Dimension(200,40));
 
 
@@ -101,6 +102,13 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener, Cha
         filesListModel.addElement("testFile4.txt");
         filesListModel.addElement("testFile5.jpeg");
 
+
+        inputField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                inputField.setText("");
+            }
+        });
 
         inputField.addActionListener(e -> {
             try {
