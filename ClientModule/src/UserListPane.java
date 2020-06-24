@@ -242,7 +242,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         parent.dispose();
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         ClientMain client = new ClientMain("localhost", 1234);
 
         UserListPane userListPane = new UserListPane(client);
@@ -265,6 +265,8 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
             }
         }
     }
+
+     */
 
     @Override
     public void online(String login) {

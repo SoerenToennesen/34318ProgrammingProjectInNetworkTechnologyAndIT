@@ -38,7 +38,7 @@ public class ClientMain {
         this.serverName = serverName;
         this.serverPort = serverPort;
     }
-    public void main(String[] args) throws IOException {
+    /*public void main(String[] args) throws IOException {
         ClientMain client = new ClientMain("localhost", 1234);
         //addUserStatusListener tells you the presence of a user when they go online/offline
         client.addUserStatusListener(new UserStatusListener() {
@@ -89,6 +89,8 @@ public class ClientMain {
             //client.logoff();
         }
     }
+
+     */
 
     public int fileTransfer(String sendTo, String fileName, String location) throws IOException {
         //location = "C:\\Users\\bruger\\Documents\\Java Applications\\34318ProgrammingProjectInNetworkTechnologyAndIT\\Files\\testFile.png";

@@ -116,7 +116,7 @@ public class CreateNewUserPane extends JPanel {
         parent.setVisible(false);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         CreateNewUserPane createNewUserPane = new CreateNewUserPane();
         JFrame frame = new JFrame("Register user");
@@ -127,6 +127,8 @@ public class CreateNewUserPane extends JPanel {
         frame.setVisible(true);
 
     }
+
+     */
 
     public void doSocketClose() throws IOException {
         client.logoff();

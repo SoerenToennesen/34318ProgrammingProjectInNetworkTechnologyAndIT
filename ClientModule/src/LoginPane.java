@@ -146,7 +146,7 @@ public class LoginPane extends JPanel {
         parent.setVisible(false);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
 
         LoginPane loginPane = new LoginPane();
@@ -159,4 +159,6 @@ public class LoginPane extends JPanel {
         frame.setVisible(true);
 
     }
+
+     */
 }
