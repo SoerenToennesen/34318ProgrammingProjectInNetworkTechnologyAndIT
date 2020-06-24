@@ -45,6 +45,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         pane2.add(chatroomName);
 
         chatroomName.setText("Insert a chatroom name...");
+        chatroomName.setSelectionColor(Color.BLUE);
         chatroomName.setPreferredSize(new Dimension(200,30));
         chatroomListUI.setPreferredSize(new Dimension(200,5000));
         userListUI.setPreferredSize(new Dimension(200,5000));
