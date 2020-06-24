@@ -44,7 +44,7 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
         pane2.add(new JScrollPane(chatroomListUI));
         pane2.add(chatroomName);
 
-        chatroomName.setToolTipText("Insert the name of the chatroom you want to create.");
+        chatroomName.setText("Insert a chatroom name...");
         chatroomName.setPreferredSize(new Dimension(200,30));
         chatroomListUI.setPreferredSize(new Dimension(200,5000));
         userListUI.setPreferredSize(new Dimension(200,5000));
@@ -67,6 +67,14 @@ public class UserListPane extends JPanel implements UserStatusListener, Chatroom
 
         //add(pane3);
         //pane2.setPreferredSize(new Dimension(300,240));
+
+
+        chatroomName.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                chatroomName.setText("");
+            }
+        });
 
 
         chatroomButton.addActionListener(e -> {
