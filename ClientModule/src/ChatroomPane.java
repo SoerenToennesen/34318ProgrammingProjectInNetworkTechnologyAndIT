@@ -19,8 +19,9 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener, Cha
     private DefaultListModel<String> listModel = new DefaultListModel<>();
     private JList<String> messageList = new JList<>(listModel);
     private JTextField inputField = new JTextField();
-    private JButton uploadButton = new JButton("Send file");
+    private JButton uploadButton = new JButton("Attach file");
     private JFileChooser fileChooser = new JFileChooser();
+    private JButton sendButton = new JButton("Send message");
 
     private DefaultListModel<String> filesListModel = new DefaultListModel<>();
     private JList<String> filesListUI = new JList<>(filesListModel);
@@ -113,16 +114,38 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener, Cha
         inputField.addActionListener(e -> {
             try {
                 String text = inputField.getText();
-                client.message("#" + chatroom, text);
-                listModel.addElement(""
-                        + "You: " + text);
+                if (!text.equalsIgnoreCase("")) {
+                    client.message("#" + chatroom, text);
+                    listModel.addElement(""
+                            + "You: " + text);
 
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                Date date = new Date();
-                String currentTime = "<html><font color=\"green\">--- Sent at " + dateFormat.format(date) + "</font></html>";
-                listModel.addElement(currentTime);
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+                    String currentTime = "<html><font color=\"green\">--- Sent at " + dateFormat.format(date) + "</font></html>";
+                    listModel.addElement(currentTime);
 
-                inputField.setText("");
+                    inputField.setText("");
+                }
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
+        });
+
+        sendButton.addActionListener(e -> {
+            try {
+                String text = inputField.getText();
+                if (!text.equalsIgnoreCase("")) {
+                    client.message("#" + chatroom, text);
+                    listModel.addElement(""
+                            + "You: " + text);
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+                    String currentTime = "<html><font color=\"green\">--- Sent at " + dateFormat.format(date) + "</font></html>";
+                    listModel.addElement(currentTime);
+
+                    inputField.setText("");
+                }
             } catch (IOException e2) {
                 e2.printStackTrace();
             }
