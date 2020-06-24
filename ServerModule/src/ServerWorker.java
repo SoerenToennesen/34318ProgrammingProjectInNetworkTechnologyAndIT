@@ -76,7 +76,7 @@ public class ServerWorker extends Thread {
 
         String sendTo = tokens[1];
         String fileName = tokens[2];
-        String fileType = tokens[3];
+        //String fileType = tokens[3];
         int fileSize = Integer.parseInt(tokens[4]);
         String fileInStringFormat = tokens[5];
 
@@ -88,21 +88,17 @@ public class ServerWorker extends Thread {
         }
 
         FileUtils.writeByteArrayToFile(new File("ServerModule/Files/" + fileName), fileBytes);
-        System.out.println("im here now3");
-        System.out.println(sendTo);
         boolean isTopic = sendTo.charAt(0) == '#';
         List<ServerWorker> workerList = server.getWorkerList();
         for (ServerWorker worker: workerList) {
             if (isTopic) {
-                System.out.println("im here now4");
                 if (worker.isMemberOfTopic(sendTo)) {
-                    String outMsg = "fileTo " + sendTo + " " + fileName + " " + fileType + " " + fileInStringFormat + "\r\n";
+                    String outMsg = "fileTo " + sendTo + " " + fileName + "\r\n";
                     worker.send(outMsg);
                 }
             } else {
-                System.out.println("im here now5");
                 if (sendTo.equalsIgnoreCase(worker.getLogin())) {
-                    String outMsg = "fileTo " + sendTo + " " + fileName + " " + fileType + " " + fileInStringFormat + "\r\n";
+                    String outMsg = "fileTo " + sendTo + " " + fileName + "\r\n";
                     worker.send(outMsg);
                 }
             }

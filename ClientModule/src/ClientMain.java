@@ -238,16 +238,13 @@ public class ClientMain {
 
         String login = tokens[1];
         String fileName = tokens[2];
-        String fileType = tokens[3];
-        String fileInStringFormat = tokens[4];
-        System.out.println(fileName);
+        //String fileType = tokens[3];
+        //String fileInStringFormat = tokens[4];
         if (login.charAt(0) == '#') {
-            System.out.println("hello im here now");
             for (ChatroomFileListener listener : chatroomFileListeners) {
                 listener.onChatroomFile(fileName);
             }
         } else {
-            System.out.println("hello im here now2");
             for (FileListener listener : fileListeners) {
                 listener.onFile(fileName);
             }
