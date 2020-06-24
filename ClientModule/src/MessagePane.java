@@ -69,8 +69,6 @@ public class MessagePane extends JPanel implements MessageListener, FileListener
         gbc.gridy = 0;
         gbc.gridwidth = GridBagConstraints.RELATIVE;
         gbc.gridheight = GridBagConstraints.RELATIVE;
-//        gbc.fill = GridBagConstraints.VERTICAL;
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.fill = GridBagConstraints.BOTH;
         add(new JScrollPane(filesListUI), gbc);
 //        filesListUI.setPreferredSize(new Dimension(80,120));
@@ -91,8 +89,6 @@ public class MessagePane extends JPanel implements MessageListener, FileListener
         filesListModel.addElement("testFile3.gif");
         filesListModel.addElement("testFile4.txt");
         filesListModel.addElement("testFile5.jpeg");
-
-
 
         inputField.addMouseListener(new MouseAdapter() {
             @Override
