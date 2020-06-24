@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.IOException;
 
 public class ClientStart extends JFrame {
@@ -13,7 +10,7 @@ public class ClientStart extends JFrame {
     private JButton exit = new JButton("Exit");
     private JLabel closeServerLabel = new JLabel();
     private JTextField closeServerField = new JTextField("");
-    private JButton closeServerButton = new JButton("Close the server");
+    private JButton closeServerButton = new JButton("Close server");
 
 
     ClientStart() {
@@ -23,41 +20,50 @@ public class ClientStart extends JFrame {
         JPanel jPanel = new JPanel();
         jPanel.setBackground(Color.black);
         jPanel.setLayout(new BorderLayout());
-        jPanel.add(loginButton,BorderLayout.WEST);
-        jPanel.add(createNewUser,BorderLayout.EAST);
+        jPanel.add(loginButton,BorderLayout.NORTH);
+        jPanel.add(createNewUser,BorderLayout.WEST);
         jPanel.add(exit,BorderLayout.SOUTH);
         jPanel.add(closeServerLabel);
-        jPanel.add(closeServerField);
-        jPanel.add(closeServerButton);
+        jPanel.add(closeServerField,BorderLayout.CENTER);
+        jPanel.add(closeServerButton,BorderLayout.EAST);
 
-        closeServerLabel.setPreferredSize(new Dimension(100, 50));
-        //loginButton.setForeground(Color.WHITE);
-
+        closeServerField.setText("Admin password...");
         closeServerField.setToolTipText("Close server - requires administrator password");
         //loginButton.setBackground(Color.BLACK);
-        closeServerField.setPreferredSize(new Dimension(100, 50));
+        closeServerField.setPreferredSize(new Dimension(40, 40));
         //loginButton.setForeground(Color.WHITE);
 
         closeServerButton.setToolTipText("Close server - requires administrator password");
         //loginButton.setBackground(Color.BLACK);
-        closeServerButton.setPreferredSize(new Dimension(100, 50));
+        closeServerButton.setBackground(new Color(250, 100, 100));
+        closeServerButton.setForeground(Color.WHITE);
+        closeServerButton.setPreferredSize(new Dimension(110, 40));
         //loginButton.setForeground(Color.WHITE);
         
         loginButton.setToolTipText("Login with your email and password");
         //loginButton.setBackground(Color.BLACK);
-        loginButton.setPreferredSize(new Dimension(200, 50));
+        loginButton.setPreferredSize(new Dimension(300, 70));
         //loginButton.setForeground(Color.WHITE);
   
         
         createNewUser.setToolTipText("Create a new user");
         //createNewUser.setBackground(Color.BLACK);
-        createNewUser.setPreferredSize(new Dimension(200, 50));
+        createNewUser.setPreferredSize(new Dimension(260, 40));
         //createNewUser.setForeground(Color.WHITE);
         
         exit.setToolTipText("Exit the application");
+//        exit.setPreferredSize(new Dimension(300,70));
         exit.setBackground(Color.BLACK);
         exit.setForeground(Color.WHITE);
         //exit.setPreferredSize(new Dimension(1, 31));
+
+
+        closeServerField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                closeServerField.setText("");
+            }
+        });
 
         loginButton.addActionListener(e -> clickLogin());
 
@@ -85,7 +91,7 @@ public class ClientStart extends JFrame {
 
 
         getContentPane().add(jPanel, BorderLayout.CENTER);
-        setSize(410,200);
+        setSize(500,180);
         //pack(); //sizes the window to fit all the components automatically
         setLocationRelativeTo(null);
         setResizable(false);
