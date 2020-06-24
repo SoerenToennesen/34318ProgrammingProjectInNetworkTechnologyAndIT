@@ -9,7 +9,7 @@ public class ClientStart extends JFrame {
     private JButton createNewUser = new JButton("Create new user");
     private JButton exit = new JButton("Exit");
     private JLabel closeServerLabel = new JLabel();
-    private JTextField closeServerField = new JTextField("");
+    private JPasswordField closeServerField = new JPasswordField("");
     private JButton closeServerButton = new JButton("Close server");
 
 
@@ -116,7 +116,7 @@ public class ClientStart extends JFrame {
     }
 
     private void initiateCloseServer() throws IOException {
-        if (closeServerField.getText().equalsIgnoreCase("admin")) {
+        if (String.valueOf(closeServerField.getPassword()).equalsIgnoreCase("admin")) {
             new CloseServer();
         } else {
             JOptionPane.showMessageDialog(this, "Administrator password to close server incorrect");
