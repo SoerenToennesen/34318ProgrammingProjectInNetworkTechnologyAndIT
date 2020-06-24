@@ -93,7 +93,6 @@ public class ClientMain {
      */
 
     public int fileTransfer(String sendTo, String fileName, String location) throws IOException {
-        //location = "C:\\Users\\bruger\\Documents\\Java Applications\\34318ProgrammingProjectInNetworkTechnologyAndIT\\Files\\testFile.png";
         StringBuilder fileType = new StringBuilder();
         for (int i = location.length() - 1; i >= 0; i--) {
             if (location.charAt(i) == '.') {
@@ -167,6 +166,7 @@ public class ClientMain {
     public void closeServer() throws IOException {
         String cmd = "closeServer\r\n";
         serverOut.write(cmd.getBytes());
+        System.exit(0);
     }
 
 

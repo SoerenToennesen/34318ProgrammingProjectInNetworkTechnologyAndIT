@@ -7,6 +7,7 @@ public class CloseServer {
 
     public CloseServer() throws IOException {
         this.client = new ClientMain("localhost",1234);
+        client.connect();
         client.closeServer();
     }
 

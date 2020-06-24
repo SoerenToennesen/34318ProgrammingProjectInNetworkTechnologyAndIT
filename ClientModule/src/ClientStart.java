@@ -69,9 +69,7 @@ public class ClientStart extends JFrame {
 
         createNewUser.addActionListener(e -> clickCreateNewUser());
 
-        exit.addActionListener(e -> {
-            System.exit(0);
-        });
+        exit.addActionListener(e -> System.exit(0));
 
         loginButton.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
@@ -86,6 +84,18 @@ public class ClientStart extends JFrame {
                 initiateCloseServer();
             } catch (IOException ex) {
                 ex.printStackTrace();
+            }
+        });
+
+        closeServerField.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                    try {
+                        initiateCloseServer();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -110,6 +120,7 @@ public class ClientStart extends JFrame {
             new CloseServer();
         } else {
             JOptionPane.showMessageDialog(this, "Administrator password to close server incorrect");
+            closeServerField.setText("");
         }
 
     }
