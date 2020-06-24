@@ -35,14 +35,54 @@ public class MessagePane extends JPanel implements MessageListener, FileListener
         fileChooser.setDialogTitle("Select a file to upload");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-        setLayout(new BorderLayout());
-        add(new JScrollPane(messageList), BorderLayout.CENTER);
-        add(inputField, BorderLayout.SOUTH);
-        JPanel paneFiles = new JPanel();
-        paneFiles.add(new JScrollPane(filesListUI));
-        paneFiles.add(uploadButton);
-        paneFiles.setPreferredSize(new Dimension(90,250));
-        add(paneFiles, BorderLayout.EAST);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(1,5,1,5);
+
+        setLayout(new GridBagLayout());
+
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = GridBagConstraints.RELATIVE;
+        gbc.gridheight = GridBagConstraints.RELATIVE;
+//        gbc.fill = GridBagConstraints.VERTICAL;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(new JScrollPane(messageList),gbc);
+//        messageList.setPreferredSize(new Dimension(200,300));
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.ipady = 20;
+        gbc.gridwidth = GridBagConstraints.RELATIVE;
+//        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weighty = -8;
+        add(inputField, gbc);
+//        inputField.setPreferredSize(new Dimension(200,40));
+
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = GridBagConstraints.RELATIVE;
+        gbc.gridheight = GridBagConstraints.RELATIVE;
+//        gbc.fill = GridBagConstraints.VERTICAL;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.BOTH;
+        add(new JScrollPane(filesListUI), gbc);
+//        filesListUI.setPreferredSize(new Dimension(80,120));
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weighty = -8;
+        gbc.ipady = 10;
+        gbc.gridwidth = GridBagConstraints.RELATIVE;
+//        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(uploadButton, gbc);
+//        uploadButton.setPreferredSize(new Dimension(80,30));
 
 
         filesListModel.addElement("testFile.png");
