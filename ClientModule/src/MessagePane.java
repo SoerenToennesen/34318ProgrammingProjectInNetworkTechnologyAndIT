@@ -139,7 +139,10 @@ public class MessagePane extends JPanel implements MessageListener, FileListener
                 String fileName = fileChooser.getSelectedFile().getName();
                 filesListModel.addElement(fileName);
 
-                client.fileTransfer(login, fileName, location);
+                int temp = client.fileTransfer(login, fileName, location);
+                if (temp == -1) {
+                    JOptionPane.showMessageDialog(this, "File cannot exceed 25MB");
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

@@ -1,20 +1,15 @@
 <component name="libraryTable">
   <library name="commons-io-2">
     <CLASSES>
-      <root url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-io-2.7" />
-      <root url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-lang3-3.10" />
+      <root url="file://$USER_HOME$/Downloads/commons-io-2.7" />
     </CLASSES>
     <JAVADOC>
-      <root url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-io-2.7/docs" />
-      <root url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-lang3-3.10/apidocs" />
+      <root url="file://$USER_HOME$/Downloads/commons-io-2.7/docs" />
     </JAVADOC>
     <SOURCES>
-      <root url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-io-2.7" />
-      <root url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-lang3-3.10" />
+      <root url="file://$USER_HOME$/Downloads/commons-io-2.7" />
     </SOURCES>
-    <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-io-2.7" recursive="false" />
-    <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-lang3-3.10" recursive="false" />
-    <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-io-2.7" recursive="false" type="SOURCES" />
-    <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/DTU/Network Technology and IT Project/commons-lang3-3.10" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://$USER_HOME$/Downloads/commons-io-2.7" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Downloads/commons-io-2.7" recursive="false" type="SOURCES" />
   </library>
 </component>

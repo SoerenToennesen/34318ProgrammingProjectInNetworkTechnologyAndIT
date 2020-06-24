@@ -171,7 +171,10 @@ public class ChatroomPane extends JPanel implements ChatroomMessageListener, Cha
                 //filesListModel.addElement(fileName);
                 //System.out.println(location);
 
-                client.fileTransfer("#" + chatroom, fileName, location);
+                int temp = client.fileTransfer("#" + chatroom, fileName, location);
+                if (temp == -1) {
+                    JOptionPane.showMessageDialog(this, "File cannot exceed 25MB");
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
