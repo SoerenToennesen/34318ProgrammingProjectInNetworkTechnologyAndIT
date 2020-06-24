@@ -59,6 +59,8 @@ public class ServerWorker extends Thread {
                 } else if ("fileTransfer".equalsIgnoreCase(cmd)) {
                     String[] tokensMsg = StringUtils.split(line, null, 6);
                     handleFileTransfer(tokensMsg);
+                } else if ("closeServer".equalsIgnoreCase(cmd)) {
+                    finalizeCloseServer();
                 }
                 else {
 
@@ -70,6 +72,11 @@ public class ServerWorker extends Thread {
         }
 
         clientSocket.close();
+    }
+
+    private void finalizeCloseServer() throws IOException {
+        clientSocket.close();
+        System.exit(0);
     }
 
     private void handleFileTransfer(String[] tokens) throws IOException {

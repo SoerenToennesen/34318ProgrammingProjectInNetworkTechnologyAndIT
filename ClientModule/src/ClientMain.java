@@ -164,7 +164,10 @@ public class ClientMain {
         return "Successful chatroom creation".equalsIgnoreCase(response);
     }
 
-
+    public void closeServer() throws IOException {
+        String cmd = "closeServer\r\n";
+        serverOut.write(cmd.getBytes());
+    }
 
 
 
@@ -348,4 +351,6 @@ public class ClientMain {
     public void removeMessageListener(MessageListener listener) {
         messageListeners.remove(listener);
     }
+
+
 }

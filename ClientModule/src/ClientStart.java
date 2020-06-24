@@ -8,9 +8,12 @@ import java.io.IOException;
 
 public class ClientStart extends JFrame {
 
-    JButton loginButton = new JButton("Login");
-    JButton createNewUser = new JButton("Create new user");
-    JButton exit = new JButton("Exit");
+    private JButton loginButton = new JButton("Login");
+    private JButton createNewUser = new JButton("Create new user");
+    private JButton exit = new JButton("Exit");
+    private JLabel closeServerLabel = new JLabel();
+    private JTextField closeServerField = new JTextField("");
+    private JButton closeServerButton = new JButton("Close the server");
 
 
     ClientStart() {
@@ -23,6 +26,22 @@ public class ClientStart extends JFrame {
         jPanel.add(loginButton,BorderLayout.WEST);
         jPanel.add(createNewUser,BorderLayout.EAST);
         jPanel.add(exit,BorderLayout.SOUTH);
+        jPanel.add(closeServerLabel);
+        jPanel.add(closeServerField);
+        jPanel.add(closeServerButton);
+
+        closeServerLabel.setPreferredSize(new Dimension(100, 50));
+        //loginButton.setForeground(Color.WHITE);
+
+        closeServerField.setToolTipText("Close server - requires administrator password");
+        //loginButton.setBackground(Color.BLACK);
+        closeServerField.setPreferredSize(new Dimension(100, 50));
+        //loginButton.setForeground(Color.WHITE);
+
+        closeServerButton.setToolTipText("Close server - requires administrator password");
+        //loginButton.setBackground(Color.BLACK);
+        closeServerButton.setPreferredSize(new Dimension(100, 50));
+        //loginButton.setForeground(Color.WHITE);
         
         loginButton.setToolTipText("Login with your email and password");
         //loginButton.setBackground(Color.BLACK);
@@ -56,6 +75,14 @@ public class ClientStart extends JFrame {
             }
         });
 
+        closeServerButton.addActionListener(e -> {
+            try {
+                initiateCloseServer();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
 
         getContentPane().add(jPanel, BorderLayout.CENTER);
         setSize(410,200);
@@ -69,6 +96,15 @@ public class ClientStart extends JFrame {
                 System.exit(0);
             }
         });
+
+    }
+
+    private void initiateCloseServer() throws IOException {
+        if (closeServerField.getText().equalsIgnoreCase("admin")) {
+            new CloseServer();
+        } else {
+            JOptionPane.showMessageDialog(this, "Administrator password to close server incorrect");
+        }
 
     }
 
