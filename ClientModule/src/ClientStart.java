@@ -27,8 +27,8 @@ public class ClientStart extends JFrame {
         jPanel.add(closeServerField,BorderLayout.CENTER);
         jPanel.add(closeServerButton,BorderLayout.EAST);
 
-        closeServerField.setText("Admin password...");
-        closeServerField.setToolTipText("Close server - requires administrator password");
+        closeServerField.setText("12345678");
+        closeServerField.setToolTipText("Insert admin password");
         //loginButton.setBackground(Color.BLACK);
         closeServerField.setPreferredSize(new Dimension(40, 40));
         //loginButton.setForeground(Color.WHITE);
