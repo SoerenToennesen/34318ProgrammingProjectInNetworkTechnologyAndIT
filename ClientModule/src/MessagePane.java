@@ -62,8 +62,6 @@ public class MessagePane extends JPanel implements MessageListener, FileListener
         gbc.weighty = -8;
         add(inputField, gbc);
         inputField.setText("Type a message...");
-//        inputField.setPreferredSize(new Dimension(200,40));
-
 
         gbc.gridx = 1;
         gbc.gridy = 0;
